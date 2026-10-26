@@ -1,0 +1,63 @@
+{
+"_meta": {
+"voice": "af_heart"
+},
+"lines": [
+{
+"id": "s1_team",
+"text": "The narration in the rest of this video is an AI voice."
+},
+{
+"id": "s2_problem",
+"text": "Cracks in concrete are mostly recorded by eye. A phone photo has no scale, so nobody can tell a hairline crack from a wide one, or whether it is growing. Saytoo Scan makes inspection measured, comparable over time, and auditable. It is decision support, not a certificate."
+},
+{
+"id": "s3_home",
+"text": "This is the live application, running on AWS in Sydney. A Lambda function behind API Gateway runs every image step with OpenCV five point zero. Samples are labelled. I'll start with a synthetic wide crack."
+},
+{
+"id": "s4_wide",
+"text": "The agent checks photo quality, finds the printed marker for scale, then measures the crack in millimetres. The true width is two point four; the median reads two point four one, the p95 two point five four. The crack is wide, so an engineer must approve."
+},
+{
+"id": "s5_approve",
+"text": "The agent can only request approval. I enter a reviewer name and approve, and only then a ticket is created. A reject is logged too."
+},
+{
+"id": "s6_trace",
+"text": "Every step is in a trace, with the reason citing measured numbers. The decider is a deterministic rules policy. Amazon Bedrock is not available to this account, so there is no language model in the loop."
+},
+{
+"id": "s7_thin",
+"text": "Now a thin crack. The first reading is under three pixels wide, so the agent zooms in, re-measures at native resolution, and only then decides. This is active perception."
+},
+{
+"id": "s8_blurry",
+"text": "A blurry photo is a failure case. The photo-level checks pass, but the printed marker's edges are blurred, above the limit. So the agent asks for a re-shoot instead of giving a wrong number."
+},
+{
+"id": "s9_growth",
+"text": "With a previous visit, Saytoo Scan aligns the two photos with Sift and Ransack, to about one pixel. The change overlay marks new growth in red: the crack extended by about forty seven millimetres. The median width grew from about zero point five to one point one millimetres, matching the synthetic truth. An engineer is asked."
+},
+{
+"id": "s10_arch",
+"text": "The architecture. The browser calls API Gateway, which invokes a Lambda container with OpenCV five. Cases go to a private S3 bucket that expires in a day. CloudWatch gives logs and an alarm that emails through SNS. The approval step is green."
+},
+{
+"id": "s11_results",
+"text": "Results. On the public KrakN test split, crack detection reaches an F1 of zero point eight six eight. Synthetic scenes: mean width error zero point zero five four millimetres, on the median width. The agent passes sixty nine of seventy scenarios. Live, all six samples behaved as expected; real uploads took four point four and eight point five seconds."
+},
+{
+"id": "s11b_real",
+"text": "Real-photo check, preliminary: four photos of two real cracks, each with a ruler reading. Three of four photos gave a width, with errors from minus forty eight to plus eleven percent against the ruler, and one photo was missed: no crack found. This is preliminary, not an accuracy claim."
+},
+{
+"id": "s12_limits",
+"text": "Limits, honestly. The real-photo check is preliminary, and the main accuracy is on synthetic scenes. Thin cracks are over-read. The severity bands are an example policy. Decisions come from deterministic rules and a human approval gate, with no language model, because Bedrock was not available. The user interface is served directly by Lambda. The code was written with an AI assistant, disclosed in the repository."
+},
+{
+"id": "s13_end",
+"text": "Thank you. Saytoo Scan, by Harsha Shindey. The code and disclosures are in the repository."
+}
+]
+}

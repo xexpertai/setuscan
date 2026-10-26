@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SetuScan (Plan B)</title>
+<meta name="description" content="Crack inspection with OpenCV 5 running in your browser as WebAssembly; static site served from AWS.">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#15181d;--muted:#5b6472;--line:#dde1e7;--accent:#0b6bcb;--accent-ink:#fff;--ok:#17794a;--warn:#a15c00;--bad:#b42318;--chip:#eef2f7;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#101317;--card:#181c22;--ink:#e8ebef;--muted:#9aa4b2;--line:#2a313a;--accent:#5aa9ff;--accent-ink:#0b1220;--ok:#4cc38a;--warn:#f0a543;--bad:#ff7b72;--chip:#222932}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:0}h2{font-size:1.15rem;margin:0 0 12px}h3{font-size:1rem;margin:16px 0 8px}
+.tag{color:var(--muted);margin:2px 0 0}
+.banner{font-size:.9rem;border-left:3px solid var(--accent);padding:4px 10px;margin-top:10px;color:var(--muted)}
+.banner.warn{border-color:var(--warn)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.sample{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.sample img{width:100%;height:120px;object-fit:cover;border-radius:6px;background:#888}
+.label{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted);align-self:flex-start}
+button{font:inherit;border:0;border-radius:8px;padding:10px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;min-height:44px}
+button.secondary{background:var(--chip);color:var(--ink)}button.danger{background:var(--bad);color:#fff}button:disabled{opacity:.5;cursor:progress}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+label{display:block;font-weight:600;margin:8px 0 4px}
+input[type=file],input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}.row>div{flex:1 1 240px}
+.status{font-weight:700;padding:10px 12px;border-radius:8px;background:var(--chip)}
+.status.ok{color:var(--ok)}.status.warn{color:var(--warn)}.status.bad{color:var(--bad)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.viewer canvas,.viewer img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);display:block}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.tabs button{min-height:36px;padding:6px 12px}
+.tabs button[aria-selected=true]{background:var(--accent);color:var(--accent-ink)}.tabs button[aria-selected=false]{background:var(--chip);color:var(--ink)}
+.trace{list-style:none;margin:0;padding:0}
+.trace li{border-left:3px solid var(--line);padding:6px 0 10px 12px;margin-left:6px;position:relative}
+.trace li::before{content:"";position:absolute;left:-7px;top:12px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.trace li.human::before{background:var(--ok)}
+.trace .act{font-family:var(--mono);font-weight:700;overflow-wrap:anywhere}
+.trace .who{font-size:.75rem;padding:1px 6px;border-radius:999px;background:var(--chip);color:var(--muted);margin-left:6px}
+.trace details{font-size:.85rem;color:var(--muted)}
+.trace pre{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:.8rem;background:var(--bg);padding:8px;border-radius:6px;max-height:260px;overflow:auto}
+.cols{display:grid;gap:16px;grid-template-columns:1fr}@media (min-width:900px){.cols{grid-template-columns:3fr 2fr}}
+footer{color:var(--muted);font-size:.85rem;padding:24px 16px;text-align:center;overflow-wrap:anywhere}
+.err{color:var(--bad);font-weight:600}.sr{position:absolute;left:-9999px}
+.ok-t{color:var(--ok);font-weight:600}.bad-t{color:var(--bad);font-weight:600}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>SetuScan</h1>
+  <p class="tag">Crack inspection that measures in millimetres, looks closer when unsure, and asks an engineer before raising a ticket.</p>
+  <p class="banner"><strong>Where things run.</strong> This page and its OpenCV 5 WebAssembly build are static files served from AWS (S3 behind CloudFront). The image analysis runs <strong>in your browser</strong> on your device; photos are not uploaded anywhere.</p>
+  <p class="banner warn">Decision support only. Not a structural certification. Severity bands are an <strong>example policy</strong>, not a design-code standard.</p>
+</div></header>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="h-samples">
+    <h2 id="h-samples">1. Try a sample</h2>
+    <div id="samples" class="grid" aria-live="polite">Loading samples...</div>
+  </section>
+
+  <section class="card" aria-labelledby="h-upload">
+    <h2 id="h-upload">or 2. Inspect your own photo</h2>
+    <p class="tag">Stick the printed SetuScan marker (docs/marker-sheet.pdf in the repository) flat next to the crack. The photo stays on your device. Do not photograph people.</p>
+    <form id="upload" class="row">
+      <div><label for="f-cur">Photo (required)</label><input id="f-cur" type="file" accept="image/jpeg,image/png,image/webp" required></div>
+      <div style="flex:0 0 auto"><button id="b-upload" type="submit">Run inspection</button></div>
+    </form>
+  </section>
+
+  <p id="busy" class="status" hidden role="status"></p>
+  <p id="error" class="err" role="alert"></p>
+
+  <section id="result" hidden>
+    <div class="card">
+      <h2>Result</h2>
+      <p id="status" class="status" role="status"></p>
+      <p id="source" class="tag"></p>
+      <div id="next"></div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h2>Images</h2>
+        <div id="tabs" class="tabs" role="tablist" aria-label="Result images"></div>
+        <div class="viewer"><canvas id="view" aria-label="Analysed image"></canvas><p id="view-cap" class="tag"></p></div>
+      </div>
+      <div class="card">
+        <h2>Measurements</h2>
+        <div id="meas"></div>
+      </div>
+    </div>
+    <div class="card" id="approval-card" hidden>
+      <h2>Engineer approval</h2>
+      <p id="approval-summary"></p>
+      <form id="approval" class="row">
+        <div><label for="rev">Your name (reviewer)</label><input id="rev" type="text" maxlength="80" required autocomplete="name"></div>
+        <div><label for="note">Note (optional)</label><input id="note" type="text" maxlength="500"></div>
+        <div style="flex:0 0 auto" class="row"><button type="submit" data-act="approve">Approve and raise ticket</button><button type="submit" class="danger" data-act="reject">Reject</button></div>
+      </form>
+    </div>
+    <div class="card" id="ticket-card" hidden><h2>Ticket</h2><p class="tag">Created in this page only (nothing is stored or sent anywhere).</p><div class="tablewrap"><table id="ticket"></table></div></div>
+
+    <div class="card">
+      <h2>Agent trace (in-browser)</h2>
+      <p class="tag">Each step: what the decider chose, why (citing OpenCV measurements), and what the tool returned. The decider here is the deterministic rules policy, running in your browser.</p>
+      <ol id="trace" class="trace"></ol>
+    </div>
+    <div class="card" id="ref-card">
+      <h2>Cross-check against desktop OpenCV 5 (Python)</h2>
+      <p class="tag">Same agent run with <code>opencv-contrib-python-headless 5.0.0.93</code> on the build laptop (label: <strong>Recorded</strong>). Agreement between two builds of OpenCV 5 on different platforms is the evidence that the browser port is faithful.</p>
+      <div id="ref" class="tablewrap"></div>
+    </div>
+    <div class="card" id="bedrock-card">
+      <h2>Amazon Bedrock decision trace</h2>
+      <div id="bedrock"></div>
+    </div>
+  </section>
+</main>
+<footer id="foot">SetuScan</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (v, d = 2) => v === null || v === undefined || Number.isNaN(v) ? "–" : (typeof v === "number" ? v.toFixed(d) : esc(v));
+let worker, ready = null, runId = 0, current = null, REF = {}, ocvVersion = null;
+const STATUS = {
+  awaiting_approval: ["warn", "Awaiting engineer approval"], ticket_raised: ["ok", "Ticket raised (approved by engineer)"],
+  rejected: ["bad", "Ticket rejected by engineer"], needs_reshoot: ["warn", "Re-shoot requested"],
+  closed: ["ok", "Closed: no engineer action needed"], error: ["bad", "Agent stopped with an error"] };
+
+function startWorker() {
+  worker = new Worker("worker.js");
+  ready = new Promise((res, rej) => {
+    worker.addEventListener("message", e => { if (e.data.type === "ready") { ocvVersion = e.data.opencv; res(); } });
+    worker.addEventListener("error", e => rej(new Error("Could not start the OpenCV worker: " + (e.message || "load error"))));
+  });
+  worker.postMessage({ type: "init" });
+  ready.then(() => { $("#foot").textContent = `SetuScan Plan B · OpenCV ${ocvVersion} (WebAssembly, runs in your browser) · static hosting on AWS S3 + CloudFront · MIT licence`; }).catch(() => {});
+}
+async function loadSamples() {
+  try {
+    const s = await (await fetch("samples/index.json")).json();
+    $("#samples").innerHTML = s.map(x => `<div class="sample"><img src="samples/${esc(x.files.current)}" alt="${esc(x.title)} (sample photo)" loading="lazy">
+      <span class="label">${esc(x.label)}</span><strong>${esc(x.title)}</strong><span class="tag" style="font-size:.9rem">${esc(x.description)}</span>
+      <button class="secondary" data-sample="${esc(x.id)}">Inspect this sample</button></div>`).join("");
+    window.SAMPLES = Object.fromEntries(s.map(x => [x.id, x]));
+  } catch (e) { $("#samples").textContent = "Could not load samples."; }
+  try { REF = await (await fetch("data/python_reference.json")).json(); } catch (e) { REF = {}; }
+}
+function busy(msg) {
+  $("#busy").hidden = !msg; $("#busy").textContent = msg || "";
+  document.querySelectorAll("button").forEach(b => b.disabled = !!msg);
+  if (msg) $("#error").textContent = "";
+}
+async function toImageData(blobOrUrl, maxSide = 3000) {
+  const bmp = await createImageBitmap(blobOrUrl instanceof Blob ? blobOrUrl : await (await fetch(blobOrUrl)).blob());
+  const s = Math.min(1, maxSide / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);   // re-drawing drops EXIF/GPS metadata
+  return { imageData: c.getContext("2d").getImageData(0, 0, c.width, c.height), canvas: c };
+}
+async function inspect(source, labels) {
+  const id = ++runId;
+  busy("Loading OpenCV 5 (WebAssembly, ~13 MB the first time)...");
+  try {
+    await ready;
+    const { imageData, canvas } = await toImageData(source);
+    busy("Running the agent in your browser (about 5 to 25 seconds)...");
+    $("#trace").innerHTML = ""; $("#result").hidden = false;
+    const t0 = performance.now();
+    const result = await new Promise((res, rej) => {
+      const on = e => {
+        if (e.data.id !== id) return;
+        if (e.data.type === "step") { busy(`Agent step ${e.data.step.step}: ${e.data.step.action}...`); }
+        if (e.data.type === "done") { worker.removeEventListener("message", on); res(e.data.result); }
+        if (e.data.type === "error") { worker.removeEventListener("message", on); rej(new Error(e.data.message)); }
+      };
+      worker.addEventListener("message", on);
+      worker.postMessage({ type: "run", id, imageData }, [imageData.data.buffer]);
+    });
+    show({ ...result, labels, wall_ms: Math.round(performance.now() - t0), input: canvas });
+    $("#result").scrollIntoView({ behavior: "smooth" });
+  } catch (e) { $("#error").textContent = e.message; }
+  finally { busy(null); }
+}
+document.addEventListener("click", e => {
+  const id = e.target?.dataset?.sample;
+  if (id && window.SAMPLES?.[id]) { const s = window.SAMPLES[id]; inspect(`samples/${s.files.current}`, { source: s.label, title: s.title, sample: id }); }
+});
+$("#upload").addEventListener("submit", e => { e.preventDefault(); const f = $("#f-cur").files[0]; if (f) inspect(f, { source: "User upload (stays on this device)" }); });
+$("#approval").addEventListener("submit", e => {
+  e.preventDefault();
+  const act = e.submitter?.dataset?.act || "approve", cl = current.classification || {};
+  current.status = act === "approve" ? "ticket_raised" : "rejected";
+  if (act === "approve") current.ticket = { ticket_id: "DEMO-" + Math.random().toString(36).slice(2, 8).toUpperCase(), approved_by: $("#rev").value, note: $("#note").value,
+    severity_band: cl.band, worst_width_mm: cl.width_max_mm, reinspect_in_days: cl.reinspect_days, policy: cl.policy, created: new Date().toISOString(), stored: "nowhere (demo, in-page only)" };
+  current.trace.push({ step: current.trace.length + 1, decider: "human", action: act === "approve" ? "approve" : "reject", rationale: `${$("#rev").value}: ${$("#note").value || "(no note)"}`, result: current.ticket || { ticket: null } });
+  show(current, true);
+});
+
+function drawRGBA(o, canvas) { canvas.width = o.width; canvas.height = o.height; canvas.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(o.data), o.width, o.height), 0, 0); }
+function show(c, keepTab) {
+  current = c; $("#result").hidden = false;
+  const [cls, txt] = STATUS[c.status] || ["", c.status];
+  $("#status").className = "status " + cls; $("#status").textContent = txt;
+  $("#source").textContent = `Input: ${c.labels?.source || "?"}${c.labels?.title ? " · " + c.labels.title : ""} · agent time ${c.agent_total_ms} ms · OpenCV ${c.opencv} (WebAssembly)`;
+  let next = "";
+  if (c.reshoot) next = `<h3>Why a re-shoot</h3><p>Reasons: <strong>${c.reshoot.reasons.map(esc).join(", ")}</strong></p><ul>${c.reshoot.advice.map(a => `<li>${esc(a)}</li>`).join("")}</ul>`;
+  if (c.classification) { const k = c.classification;
+    next += `<p>Policy result: <strong>${esc(k.band)}</strong>${k.width_max_mm != null ? ` (worst max width ${fmt(k.width_max_mm)} mm, from ${esc(k.width_source)})` : ""}. <span class="tag">Growth between visits is checked in the Python build only (SIFT is not in the OpenCV 5 JS build).</span></p>`;
+    const cs = c.trace.find(t => t.action === "close_case"); if (cs?.result?.reinspect_days) next += `<p>Re-inspect in <strong>${cs.result.reinspect_days}</strong> days.</p>`; }
+  $("#next").innerHTML = next;
+
+  const tabs = [["overlay", "Cracks (rectified view)"], ["input", "Your photo"]]; if (c.zoomOverlay) tabs.splice(1, 0, ["zoom", "Zoom (native resolution)"]);
+  $("#tabs").innerHTML = tabs.map(([k, n], i) => `<button role="tab" aria-selected="${i === 0}" data-img="${k}">${esc(n)}</button>`).join("");
+  const pick = k => {
+    const cv = $("#view");
+    if (k === "input") { cv.width = c.input.width; cv.height = c.input.height; cv.getContext("2d").drawImage(c.input, 0, 0); $("#view-cap").textContent = "Your photo as analysed (metadata removed)."; }
+    else if (k === "zoom") { drawRGBA(c.zoomOverlay, cv); $("#view-cap").textContent = "The agent's closer look at native resolution (active perception)."; }
+    else if (c.analysis) { drawRGBA(c.analysis.overlay, cv); $("#view-cap").textContent = c.analysis.view.unit === "mm" ? "Perspective removed using the marker; orange = detected crack pixels." : "No marker: pixels only."; }
+    else { cv.width = c.input.width; cv.height = c.input.height; cv.getContext("2d").drawImage(c.input, 0, 0); $("#view-cap").textContent = "Stopped before measuring; showing your photo."; }
+    $("#view").setAttribute("aria-label", k + " image"); document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.img === k));
+  };
+  $("#tabs").onclick = e => e.target.dataset.img && pick(e.target.dataset.img);
+  if (!keepTab) pick("overlay");
+
+  const unit = c.analysis?.mm_per_px ? "mm" : "px", q = c.quality, sc = c.scale;
+  const rows = (c.cracks || []).map(k => `<tr><td>#${k.id}</td><td class="num">${unit === "mm" ? fmt(k.length_mm, 0) : fmt(k.length_px, 0)}</td><td class="num">${unit === "mm" ? fmt(k.width_max_mm) : fmt(k.width_max_px, 1)}</td><td class="num">${fmt(k.width_max_px, 1)}</td><td>${esc(k.width_source)}${k.width_reliable ? "" : " ⚠ thin"}</td></tr>`).join("");
+  $("#meas").innerHTML = `<p class="tag">Quality: ${q ? (q.ok ? "passed" : "failed: " + q.issues.map(esc).join(", ")) : "–"} · Scale: ${sc?.found ? `marker ${fmt(sc.marker_mm, 0)} mm, ${fmt(sc.px_per_mm_native)} px/mm, tilt ratio ${fmt(sc.tilt_ratio)}` : "no marker"}</p>
+    ${rows ? `<div class="tablewrap"><table><caption class="sr">Cracks in the photo</caption><thead><tr><th>Crack</th><th>Length (${unit})</th><th>Max width (${unit})</th><th>Max width (px)</th><th>Width from</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p>No crack measured.</p>"}`;
+
+  $("#approval-card").hidden = c.status !== "awaiting_approval";
+  if (c.status === "awaiting_approval") $("#approval-summary").textContent = `Policy result '${c.classification.band}' (${fmt(c.classification.width_max_mm)} mm). A ticket is only created when an engineer approves.`;
+  $("#ticket-card").hidden = !c.ticket;
+  if (c.ticket) $("#ticket").innerHTML = Object.entries(c.ticket).map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("");
+  $("#trace").innerHTML = c.trace.map(t => `<li class="${t.decider === "human" ? "human" : ""}"><div><span class="num">${t.step}.</span> <span class="act">${esc(t.action)}</span><span class="who">${esc(t.decider)}</span></div><div>${esc(t.rationale || "")}</div>
+    <details><summary>tool result</summary><pre>${esc(JSON.stringify({ args: t.args, result: t.result }, null, 1))}</pre></details></li>`).join("");
+  showRef(c); showBedrock(c);
+}
+function showRef(c) {
+  const r = REF[c.labels?.sample];
+  if (!r) { $("#ref").innerHTML = `<p class="tag">No Python reference for your own photo (it is only computed for the bundled samples).</p>`; return; }
+  const jsA = c.trace.filter(t => t.decider !== "human").map(t => t.action);
+  const jw = (c.cracks[0]?.width_max_mm ?? c.cracks[0]?.width_max_px), pw = (r.cracks[0]?.width_max_mm ?? r.cracks[0]?.width_max_px);
+  const growth = r.comparison ? `<tr><th>Growth check (Python only)</th><td colspan="2">${r.comparison.ok ? `significant growth: <strong>${r.comparison.significant_growth ? "yes" : "no"}</strong>, new crack length ${fmt(r.comparison.extension, 1)} ${esc(r.comparison.unit)}` : esc(r.comparison.note)}</td></tr>` : "";
+  $("#ref").innerHTML = `<table><thead><tr><th></th><th>This browser (OpenCV ${esc(c.opencv)} wasm)</th><th>Desktop Python (OpenCV ${esc(r.opencv)}), Recorded</th></tr></thead><tbody>
+    <tr><th>Final status</th><td>${esc(c.status === "ticket_raised" || c.status === "rejected" ? "awaiting_approval" : c.status)}</td><td>${esc(r.status)}</td></tr>
+    <tr><th>Worst crack, max width</th><td class="num">${fmt(jw, 3)}</td><td class="num">${fmt(pw, 3)}</td></tr>
+    <tr><th>Cracks found</th><td class="num">${c.cracks.length}</td><td class="num">${r.cracks.length}</td></tr>
+    <tr><th>Actions</th><td>${esc(jsA.join(" → "))}</td><td>${esc(r.actions.join(" → "))}</td></tr>${growth}</tbody></table>
+    <p class="tag">Match on final status: <span class="${(c.status === r.status || (r.status === "awaiting_approval" && ["ticket_raised", "rejected"].includes(c.status))) ? "ok-t" : "bad-t"}">${(c.status === r.status || (r.status === "awaiting_approval" && ["ticket_raised", "rejected"].includes(c.status))) ? "yes" : "no"}</span>.</p>`;
+}
+async function showBedrock(c) {
+  const el = $("#bedrock"), id = c.labels?.sample; let rec = null, st = null;
+  try { st = await (await fetch("data/bedrock_status.json")).json(); } catch (e) {}
+  if (id) { try { const r = await fetch(`data/traces/${id}.json`); if (r.ok) rec = await r.json(); } catch (e) {} }
+  if (rec) {
+    el.innerHTML = `<p class="status warn">RECORDED, not live</p><p class="tag">${esc(rec.note)} Model: <code>${esc(rec.model)}</code>, ${rec.n_steps} steps, ${rec.n_fallbacks_to_rules} fell back to the rules decider.</p><ol class="trace">${rec.steps.map(t => `<li><div><span class="num">${t.step}.</span> <span class="act">${esc(t.action)}</span><span class="who">${esc(t.decider)}</span></div><div>${esc(t.rationale || "")}</div></li>`).join("")}</ol>`;
+    return;
+  }
+  el.innerHTML = `<p class="status warn">Not available</p><p>${esc(st?.message || "No Bedrock trace recorded for this input.")}</p>
+    <p class="tag">Live mode (this page calling Bedrock) needs temporary AWS credentials for the browser. ${esc(st?.live_blocker || "")}</p>`;
+}
+startWorker(); loadSamples().then(() => { const id = new URLSearchParams(location.search).get("sample"); if (id) document.querySelector(`[data-sample="${CSS.escape(id)}"]`)?.click(); });
+</script>
+</body>
+</html>

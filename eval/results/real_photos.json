@@ -1,0 +1,69 @@
+{
+ "label": "REAL photos with gauge readings taken by the entrant",
+ "generated_utc": "2026-10-26T15:17:49+00:00",
+ "marker_id0_mm_used": 18.0,
+ "comparison": "gauge width vs SetuScan MEDIAN width (p95 shown separately)",
+ "summary": {
+  "n_photos": 4,
+  "n_measured": 3,
+  "n_refused_or_failed": 1,
+  "width_mae_mm": 0.244,
+  "width_median_abs_err_mm": 0.08,
+  "width_mean_signed_bias_mm": -0.19,
+  "width_mape_pct": 21.9
+ },
+ "rows": [
+  {
+   "file": "crackA.jpg",
+   "gauge_width_mm": 0.7,
+   "gauge_length_mm": 85.0,
+   "status": "awaiting_approval",
+   "reason": "",
+   "setuscan_width_median_mm": 0.78,
+   "setuscan_width_p95_mm": 1.418,
+   "setuscan_length_mm": 31.3,
+   "width_reliable": true,
+   "zoomed": false,
+   "width_err_mm": 0.08,
+   "width_err_pct": 11.4,
+   "length_err_pct": -63.2
+  },
+  {
+   "file": "crackB.jpg",
+   "gauge_width_mm": 1.2,
+   "gauge_length_mm": 65.0,
+   "status": "awaiting_approval",
+   "reason": "",
+   "setuscan_width_median_mm": 0.623,
+   "setuscan_width_p95_mm": 1.629,
+   "setuscan_length_mm": 83.6,
+   "width_reliable": true,
+   "zoomed": false,
+   "width_err_mm": -0.577,
+   "width_err_pct": -48.1,
+   "length_err_pct": 28.6
+  },
+  {
+   "file": "crackA2.jpg",
+   "gauge_width_mm": 0.7,
+   "gauge_length_mm": 85.0,
+   "status": "closed",
+   "reason": ""
+  },
+  {
+   "file": "crackB2.jpg",
+   "gauge_width_mm": 1.2,
+   "gauge_length_mm": 65.0,
+   "status": "awaiting_approval",
+   "reason": "",
+   "setuscan_width_median_mm": 1.126,
+   "setuscan_width_p95_mm": 2.219,
+   "setuscan_length_mm": 25.2,
+   "width_reliable": true,
+   "zoomed": false,
+   "width_err_mm": -0.074,
+   "width_err_pct": -6.2,
+   "length_err_pct": -61.2
+  }
+ ]
+}

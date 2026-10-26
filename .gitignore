@@ -1,0 +1,24 @@
+data/
+.scratch/
+.env*
+!.env.example
+models/
+*.onnx
+*.pt
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+runs/
+web/uploads/
+
+# internal planning material (not part of the entry)
+PLAN.md
+raw/
+internal/
+dist-planb/
+!planb/data/
+
+video/build/
+video/*.mp4
+video/assets/

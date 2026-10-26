@@ -1,0 +1,203 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SetuScan - OpenCV 5 crack inspection on Lambda + API Gateway HTTP API + S3/CloudFront UI
+Parameters:
+  ImageUri: {Type: String, Description: ECR image URI (with digest or tag)}
+  AlarmEmail: {Type: String, Default: alarms@example.com}
+  MemoryMb: {Type: Number, Default: 2048}
+  ReservedConcurrency: {Type: Number, Default: 0, Description: "0 = none (new accounts often cannot reserve)"}
+  UseCdn: {Type: String, Default: "false", AllowedValues: ["false", "true"], Description: "true adds CloudFront in front (needs a CloudFront-verified account); false serves the app straight from the API Gateway HTTPS URL"}
+  Public: {Type: String, Default: "false", AllowedValues: ["false", "true"], Description: "false = private resources only; true adds API Gateway + CloudFront (the public URL)"}
+Conditions:
+  IsPublic: !Equals [!Ref Public, "true"]
+  WithCdn: !And [!Condition IsPublic, !Equals [!Ref UseCdn, "true"]]
+  HasReserved: !Not [!Equals [!Ref ReservedConcurrency, 0]]
+Resources:
+  CasesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: {ServerSideEncryptionConfiguration: [{ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}}]}
+      PublicAccessBlockConfiguration: {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+      LifecycleConfiguration:
+        Rules: [{Id: expire-1d, Status: Enabled, ExpirationInDays: 1}]
+  UiBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: {ServerSideEncryptionConfiguration: [{ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}}]}
+      PublicAccessBlockConfiguration: {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: /aws/lambda/setuscan-api, RetentionInDays: 14}
+  FnRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: [{Effect: Allow, Principal: {Service: lambda.amazonaws.com}, Action: "sts:AssumeRole"}]
+      Policies:
+        - PolicyName: least-privilege
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !Sub "${LogGroup.Arn}:*"
+              - Effect: Allow
+                Action: [s3:GetObject, s3:PutObject]
+                Resource: !Sub "${CasesBucket.Arn}/*"
+  Fn:
+    Type: AWS::Lambda::Function
+    DependsOn: LogGroup
+    Properties:
+      FunctionName: setuscan-api
+      PackageType: Image
+      Code: {ImageUri: !Ref ImageUri}
+      Role: !GetAtt FnRole.Arn
+      MemorySize: !Ref MemoryMb
+      Timeout: 60
+      ReservedConcurrentExecutions: !If [HasReserved, !Ref ReservedConcurrency, !Ref "AWS::NoValue"]
+      Environment: {Variables: {SETUSCAN_BUCKET: !Ref CasesBucket}}
+  Api:
+    Condition: IsPublic
+    Type: AWS::ApiGatewayV2::Api
+    Properties: {Name: setuscan-http, ProtocolType: HTTP}
+  Integration:
+    Condition: IsPublic
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref Api
+      IntegrationType: AWS_PROXY
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !GetAtt Fn.Arn
+  Route:
+    Condition: IsPublic
+    Type: AWS::ApiGatewayV2::Route
+    Properties: {ApiId: !Ref Api, RouteKey: "$default", Target: !Sub "integrations/${Integration}"}
+  ApiLogs:
+    Condition: IsPublic
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: /aws/apigw/setuscan-http, RetentionInDays: 14}
+  Stage:
+    Condition: IsPublic
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref Api
+      StageName: $default
+      AutoDeploy: true
+      DefaultRouteSettings: {ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10}
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiLogs.Arn
+        Format: '{"id":"$context.requestId","t":"$context.requestTime","m":"$context.httpMethod","p":"$context.path","s":$context.status,"ms":$context.responseLatency,"err":"$context.integrationErrorMessage"}'
+  InvokePerm:
+    Condition: IsPublic
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Fn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*"
+  Oac:
+    Condition: WithCdn
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig: {Name: setuscan-ui-oac, OriginAccessControlOriginType: s3, SigningBehavior: always, SigningProtocol: sigv4}
+  Headers:
+    Condition: WithCdn
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: setuscan-security-headers
+        SecurityHeadersConfig:
+          ContentSecurityPolicy: {Override: true, ContentSecurityPolicy: "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-ancestors 'none'"}
+          ContentTypeOptions: {Override: true}
+          ReferrerPolicy: {Override: true, ReferrerPolicy: no-referrer}
+          StrictTransportSecurity: {Override: true, AccessControlMaxAgeSec: 31536000}
+  Cdn:
+    Condition: WithCdn
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: setuscan
+        DefaultRootObject: index.html
+        HttpVersion: http2and3
+        PriceClass: PriceClass_100
+        Origins:
+          - Id: ui
+            DomainName: !GetAtt UiBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt Oac.Id
+            S3OriginConfig: {OriginAccessIdentity: ""}
+          - Id: api
+            DomainName: !Sub "${Api}.execute-api.${AWS::Region}.amazonaws.com"
+            CustomOriginConfig: {OriginProtocolPolicy: https-only, OriginSSLProtocols: [TLSv1.2], OriginReadTimeout: 60}
+        DefaultCacheBehavior:
+          TargetOriginId: ui
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
+          ResponseHeadersPolicyId: !Ref Headers
+          Compress: true
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: api
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE]
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # Managed-CachingDisabled
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # AllViewerExceptHostHeader
+            ResponseHeadersPolicyId: !Ref Headers
+            Compress: true
+  UiPolicy:
+    Condition: WithCdn
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UiBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: cloudfront.amazonaws.com}
+            Action: s3:GetObject
+            Resource: !Sub "${UiBucket.Arn}/*"
+            Condition: {StringEquals: {"AWS:SourceArn": !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${Cdn}"}}
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription: [{Protocol: email, Endpoint: !Ref AlarmEmail}]
+  ErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: setuscan-lambda-errors
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions: [{Name: FunctionName, Value: !Ref Fn}]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlarmTopic]
+  Dashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: setuscan
+      DashboardBody:
+        Fn::If:
+          - IsPublic
+          - !Sub |
+            {"widgets":[
+              {"type":"metric","x":0,"y":0,"width":12,"height":6,"properties":{"title":"Lambda invocations / errors / throttles","region":"${AWS::Region}","stat":"Sum","period":300,"metrics":[["AWS/Lambda","Invocations","FunctionName","${Fn}"],[".","Errors",".","."],[".","Throttles",".","."]]}},
+              {"type":"metric","x":12,"y":0,"width":12,"height":6,"properties":{"title":"Lambda duration (ms)","region":"${AWS::Region}","stat":"p95","period":300,"metrics":[["AWS/Lambda","Duration","FunctionName","${Fn}"]]}},
+              {"type":"metric","x":0,"y":6,"width":12,"height":6,"properties":{"title":"API requests / 4xx / 5xx","region":"${AWS::Region}","stat":"Sum","period":300,"metrics":[["AWS/ApiGateway","Count","ApiId","${Api}"],[".","4xx",".","."],[".","5xx",".","."]]}},
+              {"type":"metric","x":12,"y":6,"width":12,"height":6,"properties":{"title":"API latency (ms, p95)","region":"${AWS::Region}","stat":"p95","period":300,"metrics":[["AWS/ApiGateway","Latency","ApiId","${Api}"]]}}
+            ]}
+          - !Sub |
+            {"widgets":[
+              {"type":"metric","x":0,"y":0,"width":12,"height":6,"properties":{"title":"Lambda invocations / errors / throttles","region":"${AWS::Region}","stat":"Sum","period":300,"metrics":[["AWS/Lambda","Invocations","FunctionName","${Fn}"],[".","Errors",".","."],[".","Throttles",".","."]]}},
+              {"type":"metric","x":12,"y":0,"width":12,"height":6,"properties":{"title":"Lambda duration (ms)","region":"${AWS::Region}","stat":"p95","period":300,"metrics":[["AWS/Lambda","Duration","FunctionName","${Fn}"]]}}
+            ]}
+Outputs:
+  SiteUrl: {Condition: IsPublic, Value: !If [WithCdn, !Sub "https://${Cdn.DomainName}", !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"]}
+  UiBucketName: {Value: !Ref UiBucket}
+  CasesBucketName: {Value: !Ref CasesBucket}
+  DistributionId: {Condition: WithCdn, Value: !Ref Cdn}
+  ApiId: {Condition: IsPublic, Value: !Ref Api}
+  FunctionArn: {Value: !GetAtt Fn.Arn}

@@ -1,0 +1,603 @@
+{
+ "endpoint": "https://l4734hezca.execute-api.ap-southeast-2.amazonaws.com",
+ "run_utc": "2026-10-25T23:48:15.191055Z",
+ "region": "ap-southeast-2",
+ "client": "WSL laptop (India) -> Sydney, includes network RTT",
+ "samples": {
+  "wide": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 2780.2,
+     "agent_total_ms": 1240.6,
+     "status": "awaiting_approval",
+     "steps": 5,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "classify",
+      "request_approval"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 2.408,
+       "width_max_mm": 2.538,
+       "length_mm": 139.8
+      }
+     ],
+     "classification": {
+      "band": "wide"
+     }
+    },
+    {
+     "http": 200,
+     "wall_ms": 2574.2,
+     "agent_total_ms": 1145.2,
+     "status": "awaiting_approval",
+     "steps": 5,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "classify",
+      "request_approval"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 2.408,
+       "width_max_mm": 2.538,
+       "length_mm": 139.8
+      }
+     ],
+     "classification": {
+      "band": "wide"
+     }
+    },
+    {
+     "http": 200,
+     "wall_ms": 2517.9,
+     "agent_total_ms": 1119.0,
+     "status": "awaiting_approval",
+     "steps": 5,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "classify",
+      "request_approval"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 2.408,
+       "width_max_mm": 2.538,
+       "length_mm": 139.8
+      }
+     ],
+     "classification": {
+      "band": "wide"
+     }
+    }
+   ],
+   "statuses": [
+    "awaiting_approval"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 3,
+    "min": 2517.9,
+    "median": 2574.2,
+    "max": 2780.2
+   },
+   "agent_ms": {
+    "n": 3,
+    "min": 1119.0,
+    "median": 1145.2,
+    "max": 1240.6
+   }
+  },
+  "thin": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 3254.1,
+     "agent_total_ms": 1739.9,
+     "status": "closed",
+     "steps": 6,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "zoom_measure",
+      "classify",
+      "close_case"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 0.373,
+       "width_max_mm": 0.41,
+       "length_mm": 132.1
+      }
+     ],
+     "classification": {
+      "band": "fine"
+     }
+    },
+    {
+     "http": 200,
+     "wall_ms": 3257.7,
+     "agent_total_ms": 1714.6,
+     "status": "closed",
+     "steps": 6,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "zoom_measure",
+      "classify",
+      "close_case"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 0.373,
+       "width_max_mm": 0.41,
+       "length_mm": 132.1
+      }
+     ],
+     "classification": {
+      "band": "fine"
+     }
+    },
+    {
+     "http": 200,
+     "wall_ms": 3239.3,
+     "agent_total_ms": 1716.6,
+     "status": "closed",
+     "steps": 6,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "zoom_measure",
+      "classify",
+      "close_case"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 0.373,
+       "width_max_mm": 0.41,
+       "length_mm": 132.1
+      }
+     ],
+     "classification": {
+      "band": "fine"
+     }
+    }
+   ],
+   "statuses": [
+    "closed"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 3,
+    "min": 3239.3,
+    "median": 3254.1,
+    "max": 3257.7
+   },
+   "agent_ms": {
+    "n": 3,
+    "min": 1714.6,
+    "median": 1716.6,
+    "max": 1739.9
+   }
+  },
+  "blurry": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 1468.1,
+     "agent_total_ms": 108.7,
+     "status": "needs_reshoot",
+     "steps": 3,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [],
+     "classification": {}
+    },
+    {
+     "http": 200,
+     "wall_ms": 1461.2,
+     "agent_total_ms": 103.3,
+     "status": "needs_reshoot",
+     "steps": 3,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [],
+     "classification": {}
+    },
+    {
+     "http": 200,
+     "wall_ms": 1558.9,
+     "agent_total_ms": 99.1,
+     "status": "needs_reshoot",
+     "steps": 3,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [],
+     "classification": {}
+    }
+   ],
+   "statuses": [
+    "needs_reshoot"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 3,
+    "min": 1461.2,
+    "median": 1468.1,
+    "max": 1558.9
+   },
+   "agent_ms": {
+    "n": 3,
+    "min": 99.1,
+    "median": 103.3,
+    "max": 108.7
+   }
+  },
+  "nomarker": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 2508.8,
+     "agent_total_ms": 1001.7,
+     "status": "needs_reshoot",
+     "steps": 4,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      }
+     ],
+     "classification": {}
+    },
+    {
+     "http": 200,
+     "wall_ms": 2432.7,
+     "agent_total_ms": 1005.4,
+     "status": "needs_reshoot",
+     "steps": 4,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      }
+     ],
+     "classification": {}
+    }
+   ],
+   "statuses": [
+    "needs_reshoot"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 2,
+    "min": 2432.7,
+    "median": 2470.8,
+    "max": 2508.8
+   },
+   "agent_ms": {
+    "n": 2,
+    "min": 1001.7,
+    "median": 1003.5,
+    "max": 1005.4
+   }
+  },
+  "krakn": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 1423.6,
+     "agent_total_ms": 108.2,
+     "status": "needs_reshoot",
+     "steps": 4,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      },
+      {
+       "id": 2,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      }
+     ],
+     "classification": {}
+    },
+    {
+     "http": 200,
+     "wall_ms": 1463.8,
+     "agent_total_ms": 110.6,
+     "status": "needs_reshoot",
+     "steps": 4,
+     "actions": [
+      "check_quality",
+      "detect_scale",
+      "segment_measure",
+      "request_reshoot"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      },
+      {
+       "id": 2,
+       "width_median_mm": null,
+       "width_max_mm": null,
+       "length_mm": null
+      }
+     ],
+     "classification": {}
+    }
+   ],
+   "statuses": [
+    "needs_reshoot"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 2,
+    "min": 1423.6,
+    "median": 1443.7,
+    "max": 1463.8
+   },
+   "agent_ms": {
+    "n": 2,
+    "min": 108.2,
+    "median": 109.4,
+    "max": 110.6
+   }
+  },
+  "growth": {
+   "runs": [
+    {
+     "http": 200,
+     "wall_ms": 6430.0,
+     "agent_total_ms": 4780.4,
+     "status": "awaiting_approval",
+     "steps": 10,
+     "actions": [
+      "check_quality",
+      "check_quality",
+      "detect_scale",
+      "detect_scale",
+      "segment_measure",
+      "segment_measure",
+      "zoom_measure",
+      "compare_visits",
+      "classify",
+      "request_approval"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 1.087,
+       "width_max_mm": 1.157,
+       "length_mm": 135.7
+      }
+     ],
+     "classification": {
+      "band": "moderate"
+     }
+    },
+    {
+     "http": 200,
+     "wall_ms": 6435.9,
+     "agent_total_ms": 4687.6,
+     "status": "awaiting_approval",
+     "steps": 10,
+     "actions": [
+      "check_quality",
+      "check_quality",
+      "detect_scale",
+      "detect_scale",
+      "segment_measure",
+      "segment_measure",
+      "zoom_measure",
+      "compare_visits",
+      "classify",
+      "request_approval"
+     ],
+     "deciders": [
+      "rules"
+     ],
+     "widths_mm": [
+      {
+       "id": 1,
+       "width_median_mm": 1.087,
+       "width_max_mm": 1.157,
+       "length_mm": 135.7
+      }
+     ],
+     "classification": {
+      "band": "moderate"
+     }
+    }
+   ],
+   "statuses": [
+    "awaiting_approval"
+   ],
+   "consistent": true,
+   "wall_ms": {
+    "n": 2,
+    "min": 6430.0,
+    "median": 6432.9,
+    "max": 6435.9
+   },
+   "agent_ms": {
+    "n": 2,
+    "min": 4687.6,
+    "median": 4734.0,
+    "max": 4780.4
+   }
+  }
+ },
+ "notes": [],
+ "health": {
+  "status": 200,
+  "latency_ms": 2860.2,
+  "body": {
+   "ok": true,
+   "opencv": "5.0.0",
+   "python": "3.12.15",
+   "decider": "rules",
+   "decider_kind": "deterministic rules (no LLM)",
+   "storage": "S3 (1-day lifecycle)",
+   "runtime": "AWS Lambda"
+  }
+ },
+ "upload_and_gate": {
+  "upload_single_wide": {
+   "http": 200,
+   "wall_ms": 4400.1,
+   "status": "awaiting_approval",
+   "widths_mm": [
+    {
+     "id": 1,
+     "width_median_mm": 2.408,
+     "width_max_mm": 2.538
+    }
+   ]
+  },
+  "upload_two_visit_growth": {
+   "http": 200,
+   "wall_ms": 8545.4,
+   "status": "awaiting_approval",
+   "comparison": {
+    "ok": true,
+    "unit": "mm",
+    "length_a": 84.544,
+    "length_b": 135.714,
+    "width_max_a": 0.585,
+    "width_max_b": 1.157,
+    "extension": 47.115,
+    "length_change": 51.17,
+    "width_change": 0.571,
+    "significant_growth": true,
+    "note": "",
+    "width_median_a": 0.494,
+    "width_median_b": 1.084
+   }
+  },
+  "ticket_before_approval": null,
+  "approve": {
+   "http": 200,
+   "wall_ms": 1568.4,
+   "status": "ticket_raised",
+   "ticket_created": true
+  },
+  "approve_twice": {
+   "http": 409
+  },
+  "unknown_sample": {
+   "http": 404
+  },
+  "non_image": {
+   "http": 415
+  },
+  "approve_missing_case": {
+   "http": 404
+  }
+ },
+ "overall_wall_ms": {
+  "n": 15,
+  "min": 1423.6,
+  "median": 2517.9,
+  "max": 6435.9
+ },
+ "first_call_this_session_ms": 2780.2,
+ "api_calls_made": 23
+}

@@ -1,0 +1,8 @@
+# SetuScan on AWS Lambda (container image). OpenCV 5 runs inside the function.
+FROM public.ecr.aws/lambda/python:3.12
+COPY requirements-lambda.txt ${LAMBDA_TASK_ROOT}/
+RUN pip install --no-cache-dir -r ${LAMBDA_TASK_ROOT}/requirements-lambda.txt
+COPY setuscan ${LAMBDA_TASK_ROOT}/setuscan
+COPY web ${LAMBDA_TASK_ROOT}/web
+COPY lambda_handler.py ${LAMBDA_TASK_ROOT}/
+CMD ["lambda_handler.handler"]

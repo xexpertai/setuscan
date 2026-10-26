@@ -1,0 +1,5 @@
+opencv-contrib-python-headless==5.0.0.93
+numpy>=2.0,<3
+fastapi>=0.115
+python-multipart>=0.0.9
+mangum>=0.19

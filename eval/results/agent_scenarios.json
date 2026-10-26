@@ -1,0 +1,3170 @@
+{
+ "provenance": {
+  "script": "eval/eval_agent.py",
+  "generated_utc": "2026-10-11T19:47:56+00:00",
+  "git_commit": "b53b29f",
+  "setuscan_dirty": false,
+  "opencv": "5.0.0",
+  "numpy": "2.5.4",
+  "python": "3.12.15",
+  "machine": "x86_64",
+  "cpu_count": 8
+ },
+ "label": "SYNTHETIC scenarios; deterministic rules decider (no LLM)",
+ "n_runs": 70,
+ "task_success_rate": 0.9857,
+ "terminal_status_accuracy": 0.9857,
+ "false_escalation_rate": 0.0,
+ "missed_escalation_rate": 0.0,
+ "error_status_runs": 0,
+ "mean_steps": 5.14,
+ "mean_ms": 2957.0,
+ "per_scenario": {
+  "fine_crack_closes": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "closed": 5
+   },
+   "expected_status": "closed",
+   "required_action": null,
+   "forbidden_action": "request_approval"
+  },
+  "hairline_closes": {
+   "n": 5,
+   "success_rate": 0.8,
+   "statuses": {
+    "closed": 4,
+    "needs_reshoot": 1
+   },
+   "expected_status": "closed",
+   "required_action": null,
+   "forbidden_action": "request_approval"
+  },
+  "moderate_escalates": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "awaiting_approval": 5
+   },
+   "expected_status": "awaiting_approval",
+   "required_action": "request_approval",
+   "forbidden_action": null
+  },
+  "wide_escalates": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "awaiting_approval": 5
+   },
+   "expected_status": "awaiting_approval",
+   "required_action": "request_approval",
+   "forbidden_action": null
+  },
+  "no_crack_closes": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "closed": 5
+   },
+   "expected_status": "closed",
+   "required_action": null,
+   "forbidden_action": "request_approval"
+  },
+  "thin_far_needs_zoom": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "closed": 5
+   },
+   "expected_status": null,
+   "required_action": "zoom_measure",
+   "forbidden_action": null
+  },
+  "blurry_reshoot": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": "request_reshoot",
+   "forbidden_action": "segment_measure"
+  },
+  "dark_reshoot": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": "request_reshoot",
+   "forbidden_action": "segment_measure"
+  },
+  "glare_reshoot": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": "request_reshoot",
+   "forbidden_action": "segment_measure"
+  },
+  "no_marker_reshoot": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": "request_reshoot",
+   "forbidden_action": "classify"
+  },
+  "growth_escalates": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "awaiting_approval": 5
+   },
+   "expected_status": "awaiting_approval",
+   "required_action": "compare_visits",
+   "forbidden_action": null
+  },
+  "stable_two_visits_close": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "closed": 5
+   },
+   "expected_status": "closed",
+   "required_action": "compare_visits",
+   "forbidden_action": "request_approval"
+  },
+  "unrelated_walls_reshoot": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": "compare_visits",
+   "forbidden_action": "request_approval"
+  },
+  "blank_image_handled": {
+   "n": 5,
+   "success_rate": 1.0,
+   "statuses": {
+    "needs_reshoot": 5
+   },
+   "expected_status": "needs_reshoot",
+   "required_action": null,
+   "forbidden_action": null
+  }
+ },
+ "failures": [
+  {
+   "scenario": "hairline_closes",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "request_reshoot"
+   ],
+   "ok_status": false,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": false,
+   "steps": 5,
+   "ms": 3845.3,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_far"
+    ],
+    "advice": [
+     "Move closer (about half the distance) keeping the marker and the crack in view."
+    ],
+    "crack_id": 1
+   },
+   "classification": null,
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       77.71,
+       1.52,
+       153.36,
+       161.67
+      ],
+      "scale_px_per_unit": 8.8725,
+      "native_scale": 8.8725,
+      "size": [
+       672,
+       1421
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.375,
+      "width_max_px": 1.96,
+      "width_median_mm": 0.277
+     },
+     "after": {
+      "width_max_mm": 0.319,
+      "width_max_px": 2.83,
+      "width_median_mm": 0.24
+     },
+     "width_reliable": false,
+     "ambiguous": true
+    }
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "scenario": "fine_crack_closes",
+   "seed": 100,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2130.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.7,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "fine_crack_closes",
+   "seed": 101,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1826.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.686,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "fine_crack_closes",
+   "seed": 102,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2002.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.722,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "fine_crack_closes",
+   "seed": 103,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2005.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.705,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "fine_crack_closes",
+   "seed": 104,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2145.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.702,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "hairline_closes",
+   "seed": 100,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 4295.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.328,
+    "worst_crack": 1,
+    "width_source": "zoom view at 9.39 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       85.43,
+       -15.37,
+       223.28,
+       102.65
+      ],
+      "scale_px_per_unit": 9.3863,
+      "native_scale": 9.3863,
+      "size": [
+       1294,
+       1108
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.36,
+      "width_max_px": 1.9,
+      "width_median_mm": 0.271
+     },
+     "after": {
+      "width_max_mm": 0.328,
+      "width_max_px": 3.07,
+      "width_median_mm": 0.25
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "hairline_closes",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "request_reshoot"
+   ],
+   "ok_status": false,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": false,
+   "steps": 5,
+   "ms": 3845.3,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_far"
+    ],
+    "advice": [
+     "Move closer (about half the distance) keeping the marker and the crack in view."
+    ],
+    "crack_id": 1
+   },
+   "classification": null,
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       77.71,
+       1.52,
+       153.36,
+       161.67
+      ],
+      "scale_px_per_unit": 8.8725,
+      "native_scale": 8.8725,
+      "size": [
+       672,
+       1421
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.375,
+      "width_max_px": 1.96,
+      "width_median_mm": 0.277
+     },
+     "after": {
+      "width_max_mm": 0.319,
+      "width_max_px": 2.83,
+      "width_median_mm": 0.24
+     },
+     "width_reliable": false,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "hairline_closes",
+   "seed": 102,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 3451.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.358,
+    "worst_crack": 1,
+    "width_source": "zoom view at 9.10 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       85.45,
+       1.66,
+       142.23,
+       148.82
+      ],
+      "scale_px_per_unit": 9.1006,
+      "native_scale": 9.1006,
+      "size": [
+       517,
+       1340
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.396,
+      "width_max_px": 2.04,
+      "width_median_mm": 0.282
+     },
+     "after": {
+      "width_max_mm": 0.358,
+      "width_max_px": 3.26,
+      "width_median_mm": 0.266
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "hairline_closes",
+   "seed": 103,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 4033.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.359,
+    "worst_crack": 1,
+    "width_source": "zoom view at 8.94 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       74.98,
+       -14.6,
+       191.98,
+       88.74
+      ],
+      "scale_px_per_unit": 8.9367,
+      "native_scale": 8.9367,
+      "size": [
+       1046,
+       924
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.4,
+      "width_max_px": 2.02,
+      "width_median_mm": 0.278
+     },
+     "after": {
+      "width_max_mm": 0.359,
+      "width_max_px": 3.21,
+      "width_median_mm": 0.264
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "hairline_closes",
+   "seed": 104,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 4013.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.354,
+    "worst_crack": 1,
+    "width_source": "zoom view at 9.02 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       90.73,
+       -15.98,
+       219.31,
+       121.3
+      ],
+      "scale_px_per_unit": 9.0154,
+      "native_scale": 9.0154,
+      "size": [
+       1160,
+       1238
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.411,
+      "width_max_px": 2.12,
+      "width_median_mm": 0.254
+     },
+     "after": {
+      "width_max_mm": 0.354,
+      "width_max_px": 3.19,
+      "width_median_mm": 0.273
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "moderate_escalates",
+   "seed": 100,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2039.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "moderate",
+    "action": "review",
+    "width_max_mm": 1.599,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 30,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "moderate_escalates",
+   "seed": 101,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1807.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "moderate",
+    "action": "review",
+    "width_max_mm": 1.605,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 30,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "moderate_escalates",
+   "seed": 102,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1914.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "moderate",
+    "action": "review",
+    "width_max_mm": 1.626,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 30,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "moderate_escalates",
+   "seed": 103,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1883.6,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "moderate",
+    "action": "review",
+    "width_max_mm": 1.609,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 30,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "moderate_escalates",
+   "seed": 104,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1745.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "moderate",
+    "action": "review",
+    "width_max_mm": 1.629,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 30,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "wide_escalates",
+   "seed": 100,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1930.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "wide",
+    "action": "urgent_review",
+    "width_max_mm": 3.171,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 7,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "wide_escalates",
+   "seed": 101,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 3075.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "wide",
+    "action": "urgent_review",
+    "width_max_mm": 3.203,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 7,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "wide_escalates",
+   "seed": 102,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1897.0,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "wide",
+    "action": "urgent_review",
+    "width_max_mm": 3.221,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 7,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "wide_escalates",
+   "seed": 103,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2127.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "wide",
+    "action": "urgent_review",
+    "width_max_mm": 3.175,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 7,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "wide_escalates",
+   "seed": 104,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 2290.0,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "wide",
+    "action": "urgent_review",
+    "width_max_mm": 3.232,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": true,
+    "reinspect_days": 7,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_crack_closes",
+   "seed": 100,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1321.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "no_crack_detected",
+    "width_max_mm": null,
+    "needs_engineer": false,
+    "growth": false,
+    "reinspect_days": 365,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_crack_closes",
+   "seed": 101,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1355.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "no_crack_detected",
+    "width_max_mm": null,
+    "needs_engineer": false,
+    "growth": false,
+    "reinspect_days": 365,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_crack_closes",
+   "seed": 102,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1204.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "no_crack_detected",
+    "width_max_mm": null,
+    "needs_engineer": false,
+    "growth": false,
+    "reinspect_days": 365,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_crack_closes",
+   "seed": 103,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1523.6,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "no_crack_detected",
+    "width_max_mm": null,
+    "needs_engineer": false,
+    "growth": false,
+    "reinspect_days": 365,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_crack_closes",
+   "seed": 104,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 5,
+   "ms": 1587.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "no_crack_detected",
+    "width_max_mm": null,
+    "needs_engineer": false,
+    "growth": false,
+    "reinspect_days": 365,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "thin_far_needs_zoom",
+   "seed": 100,
+   "status": "closed",
+   "expected_status": null,
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 5605.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.391,
+    "worst_crack": 1,
+    "width_source": "zoom view at 13.56 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       85.48,
+       -15.4,
+       223.39,
+       102.65
+      ],
+      "scale_px_per_unit": 13.5593,
+      "native_scale": 13.5593,
+      "size": [
+       1870,
+       1601
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.414,
+      "width_max_px": 2.19,
+      "width_median_mm": 0.38
+     },
+     "after": {
+      "width_max_mm": 0.391,
+      "width_max_px": 5.3,
+      "width_median_mm": 0.361
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "thin_far_needs_zoom",
+   "seed": 101,
+   "status": "closed",
+   "expected_status": null,
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 4238.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.39,
+    "worst_crack": 1,
+    "width_source": "zoom view at 12.33 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       75.57,
+       -0.52,
+       153.45,
+       161.73
+      ],
+      "scale_px_per_unit": 12.3269,
+      "native_scale": 12.8181,
+      "size": [
+       961,
+       2000
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.393,
+      "width_max_px": 2.05,
+      "width_median_mm": 0.35
+     },
+     "after": {
+      "width_max_mm": 0.39,
+      "width_max_px": 4.81,
+      "width_median_mm": 0.361
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "thin_far_needs_zoom",
+   "seed": 102,
+   "status": "closed",
+   "expected_status": null,
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 3428.6,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.4,
+    "worst_crack": 1,
+    "width_source": "zoom view at 13.15 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       85.88,
+       2.04,
+       142.03,
+       149.0
+      ],
+      "scale_px_per_unit": 13.1494,
+      "native_scale": 13.1494,
+      "size": [
+       739,
+       1933
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.442,
+      "width_max_px": 2.27,
+      "width_median_mm": 0.389
+     },
+     "after": {
+      "width_max_mm": 0.4,
+      "width_max_px": 5.26,
+      "width_median_mm": 0.36
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "thin_far_needs_zoom",
+   "seed": 103,
+   "status": "closed",
+   "expected_status": null,
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 4612.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.398,
+    "worst_crack": 1,
+    "width_source": "zoom view at 12.91 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       74.75,
+       -14.76,
+       192.33,
+       89.35
+      ],
+      "scale_px_per_unit": 12.911,
+      "native_scale": 12.911,
+      "size": [
+       1519,
+       1345
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.435,
+      "width_max_px": 2.2,
+      "width_median_mm": 0.395
+     },
+     "after": {
+      "width_max_mm": 0.398,
+      "width_max_px": 5.14,
+      "width_median_mm": 0.36
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "thin_far_needs_zoom",
+   "seed": 104,
+   "status": "closed",
+   "expected_status": null,
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "zoom_measure",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 6,
+   "ms": 5950.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.396,
+    "worst_crack": 1,
+    "width_source": "zoom view at 13.02 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       90.73,
+       -16.02,
+       219.21,
+       121.38
+      ],
+      "scale_px_per_unit": 13.0234,
+      "native_scale": 13.0234,
+      "size": [
+       1674,
+       1790
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.412,
+      "width_max_px": 2.13,
+      "width_median_mm": 0.363
+     },
+     "after": {
+      "width_max_mm": 0.396,
+      "width_max_px": 5.15,
+      "width_median_mm": 0.362
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "blurry_reshoot",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 3,
+   "ms": 172.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry_marker"
+    ],
+    "advice": [
+     "The photo is out of focus or shaken: tap to focus on the crack, hold steady (or brace the phone), and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blurry_reshoot",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 3,
+   "ms": 280.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry_marker"
+    ],
+    "advice": [
+     "The photo is out of focus or shaken: tap to focus on the crack, hold steady (or brace the phone), and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blurry_reshoot",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 3,
+   "ms": 155.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry_marker"
+    ],
+    "advice": [
+     "The photo is out of focus or shaken: tap to focus on the crack, hold steady (or brace the phone), and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blurry_reshoot",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 3,
+   "ms": 181.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry_marker"
+    ],
+    "advice": [
+     "The photo is out of focus or shaken: tap to focus on the crack, hold steady (or brace the phone), and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blurry_reshoot",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 3,
+   "ms": 190.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry_marker"
+    ],
+    "advice": [
+     "The photo is out of focus or shaken: tap to focus on the crack, hold steady (or brace the phone), and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "dark_reshoot",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 87.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_dark"
+    ],
+    "advice": [
+     "Add light (torch at an angle) or move to daylight and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "dark_reshoot",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 145.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_dark"
+    ],
+    "advice": [
+     "Add light (torch at an angle) or move to daylight and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "dark_reshoot",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 88.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_dark"
+    ],
+    "advice": [
+     "Add light (torch at an angle) or move to daylight and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "dark_reshoot",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 135.3,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_dark"
+    ],
+    "advice": [
+     "Add light (torch at an angle) or move to daylight and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "dark_reshoot",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 137.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "too_dark"
+    ],
+    "advice": [
+     "Add light (torch at an angle) or move to daylight and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "glare_reshoot",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 89.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "overexposed",
+     "glare"
+    ],
+    "advice": [
+     "Avoid direct sun on the surface; shade it or lower exposure.",
+     "Change the angle so the light does not reflect straight into the camera."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "glare_reshoot",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 135.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "overexposed",
+     "glare"
+    ],
+    "advice": [
+     "Avoid direct sun on the surface; shade it or lower exposure.",
+     "Change the angle so the light does not reflect straight into the camera."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "glare_reshoot",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 172.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "overexposed",
+     "glare"
+    ],
+    "advice": [
+     "Avoid direct sun on the surface; shade it or lower exposure.",
+     "Change the angle so the light does not reflect straight into the camera."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "glare_reshoot",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 128.3,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "glare"
+    ],
+    "advice": [
+     "Change the angle so the light does not reflect straight into the camera."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "glare_reshoot",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 143.0,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "overexposed",
+     "glare"
+    ],
+    "advice": [
+     "Avoid direct sun on the surface; shade it or lower exposure.",
+     "Change the angle so the light does not reflect straight into the camera."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_marker_reshoot",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 4,
+   "ms": 1458.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "no_marker"
+    ],
+    "advice": [
+     "Stick the printed SetuScan marker flat on the surface next to the crack and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_marker_reshoot",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 4,
+   "ms": 1996.6,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "no_marker"
+    ],
+    "advice": [
+     "Stick the printed SetuScan marker flat on the surface next to the crack and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_marker_reshoot",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 4,
+   "ms": 1456.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "no_marker"
+    ],
+    "advice": [
+     "Stick the printed SetuScan marker flat on the surface next to the crack and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_marker_reshoot",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 4,
+   "ms": 1380.3,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "no_marker"
+    ],
+    "advice": [
+     "Stick the printed SetuScan marker flat on the surface next to the crack and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "no_marker_reshoot",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "detect_scale",
+    "segment_measure",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 4,
+   "ms": 1530.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "no_marker"
+    ],
+    "advice": [
+     "Stick the printed SetuScan marker flat on the surface next to the crack and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "growth_escalates",
+   "seed": 100,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 9322.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.978,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.98 px/mm",
+    "growth": true,
+    "needs_engineer": true,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       90.17,
+       1.62,
+       205.54,
+       130.1
+      ],
+      "scale_px_per_unit": 6.9849,
+      "native_scale": 6.9849,
+      "size": [
+       806,
+       898
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.985,
+      "width_max_px": 5.39,
+      "width_median_mm": 0.915
+     },
+     "after": {
+      "width_max_mm": 0.978,
+      "width_max_px": 6.83,
+      "width_median_mm": 0.913
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "growth_escalates",
+   "seed": 101,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 9108.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.972,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.44 px/mm",
+    "growth": true,
+    "needs_engineer": true,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       90.13,
+       -8.96,
+       159.04,
+       148.45
+      ],
+      "scale_px_per_unit": 6.4424,
+      "native_scale": 6.4424,
+      "size": [
+       444,
+       1015
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.974,
+      "width_max_px": 4.85,
+      "width_median_mm": 0.893
+     },
+     "after": {
+      "width_max_mm": 0.972,
+      "width_max_px": 6.26,
+      "width_median_mm": 0.893
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "growth_escalates",
+   "seed": 102,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 9270.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.984,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.69 px/mm",
+    "growth": true,
+    "needs_engineer": true,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       24.42,
+       -3.75,
+       107.0,
+       169.73
+      ],
+      "scale_px_per_unit": 6.69,
+      "native_scale": 6.69,
+      "size": [
+       553,
+       1161
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.991,
+      "width_max_px": 5.34,
+      "width_median_mm": 0.893
+     },
+     "after": {
+      "width_max_mm": 0.984,
+      "width_max_px": 6.59,
+      "width_median_mm": 0.894
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "growth_escalates",
+   "seed": 103,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 8898.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.989,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.53 px/mm",
+    "growth": true,
+    "needs_engineer": true,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       65.24,
+       -14.6,
+       223.62,
+       60.52
+      ],
+      "scale_px_per_unit": 6.5344,
+      "native_scale": 6.5344,
+      "size": [
+       1035,
+       491
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.987,
+      "width_max_px": 5.09,
+      "width_median_mm": 0.898
+     },
+     "after": {
+      "width_max_mm": 0.989,
+      "width_max_px": 6.46,
+      "width_median_mm": 0.898
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "growth_escalates",
+   "seed": 104,
+   "status": "awaiting_approval",
+   "expected_status": "awaiting_approval",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "request_approval"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 9627.1,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.969,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.61 px/mm",
+    "growth": true,
+    "needs_engineer": true,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       89.24,
+       3.31,
+       210.52,
+       144.04
+      ],
+      "scale_px_per_unit": 6.6094,
+      "native_scale": 6.6094,
+      "size": [
+       802,
+       931
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.971,
+      "width_max_px": 4.89,
+      "width_median_mm": 0.897
+     },
+     "after": {
+      "width_max_mm": 0.969,
+      "width_max_px": 6.41,
+      "width_median_mm": 0.896
+     },
+     "width_reliable": true,
+     "ambiguous": true
+    }
+   ]
+  },
+  {
+   "scenario": "stable_two_visits_close",
+   "seed": 100,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 9,
+   "ms": 7897.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.603,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "stable_two_visits_close",
+   "seed": 101,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "zoom_measure",
+    "compare_visits",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 10,
+   "ms": 8034.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.593,
+    "worst_crack": 1,
+    "width_source": "zoom view at 6.44 px/mm",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": [
+    {
+     "crack_id": 1,
+     "found_in_zoom": true,
+     "view": {
+      "unit": "mm",
+      "box": [
+       93.41,
+       -6.88,
+       156.96,
+       132.53
+      ],
+      "scale_px_per_unit": 6.4424,
+      "native_scale": 6.4424,
+      "size": [
+       410,
+       899
+      ]
+     },
+     "before": {
+      "width_max_mm": 0.598,
+      "width_max_px": 2.98,
+      "width_median_mm": 0.501
+     },
+     "after": {
+      "width_max_mm": 0.593,
+      "width_max_px": 3.82,
+      "width_median_mm": 0.512
+     },
+     "width_reliable": true,
+     "ambiguous": false
+    }
+   ]
+  },
+  {
+   "scenario": "stable_two_visits_close",
+   "seed": 102,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 9,
+   "ms": 7377.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.587,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "stable_two_visits_close",
+   "seed": 103,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 9,
+   "ms": 7423.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.601,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "stable_two_visits_close",
+   "seed": 104,
+   "status": "closed",
+   "expected_status": "closed",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "classify",
+    "close_case"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 9,
+   "ms": 7301.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": null,
+   "classification": {
+    "band": "fine",
+    "action": "monitor",
+    "width_max_mm": 0.607,
+    "worst_crack": 1,
+    "width_source": "working view",
+    "growth": false,
+    "needs_engineer": false,
+    "reinspect_days": 180,
+    "policy": "EXAMPLE policy (illustrative thresholds, not a code-certified standard)"
+   },
+   "zoom_results": []
+  },
+  {
+   "scenario": "unrelated_walls_reshoot",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 8,
+   "ms": 7960.0,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "misaligned"
+    ],
+    "advice": [
+     "Retake from roughly the same position and angle as the previous visit's photo."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "unrelated_walls_reshoot",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 8,
+   "ms": 7710.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "misaligned"
+    ],
+    "advice": [
+     "Retake from roughly the same position and angle as the previous visit's photo."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "unrelated_walls_reshoot",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 8,
+   "ms": 4957.7,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "misaligned"
+    ],
+    "advice": [
+     "Retake from roughly the same position and angle as the previous visit's photo."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "unrelated_walls_reshoot",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 8,
+   "ms": 5203.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "misaligned"
+    ],
+    "advice": [
+     "Retake from roughly the same position and angle as the previous visit's photo."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "unrelated_walls_reshoot",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "check_quality",
+    "detect_scale",
+    "detect_scale",
+    "segment_measure",
+    "segment_measure",
+    "compare_visits",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 8,
+   "ms": 5080.5,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "misaligned"
+    ],
+    "advice": [
+     "Retake from roughly the same position and angle as the previous visit's photo."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blank_image_handled",
+   "seed": 100,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 57.9,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry"
+    ],
+    "advice": [
+     "Hold the phone steady, tap to focus on the crack, and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blank_image_handled",
+   "seed": 101,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 62.2,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry"
+    ],
+    "advice": [
+     "Hold the phone steady, tap to focus on the crack, and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blank_image_handled",
+   "seed": 102,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 88.0,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry"
+    ],
+    "advice": [
+     "Hold the phone steady, tap to focus on the crack, and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blank_image_handled",
+   "seed": 103,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 128.4,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry"
+    ],
+    "advice": [
+     "Hold the phone steady, tap to focus on the crack, and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  },
+  {
+   "scenario": "blank_image_handled",
+   "seed": 104,
+   "status": "needs_reshoot",
+   "expected_status": "needs_reshoot",
+   "actions": [
+    "check_quality",
+    "request_reshoot"
+   ],
+   "ok_status": true,
+   "ok_required_action": true,
+   "ok_forbidden_action": true,
+   "success": true,
+   "steps": 2,
+   "ms": 124.8,
+   "deciders": [
+    "rules"
+   ],
+   "reshoot": {
+    "visit": "current",
+    "reasons": [
+     "blurry"
+    ],
+    "advice": [
+     "Hold the phone steady, tap to focus on the crack, and retake."
+    ],
+    "crack_id": null
+   },
+   "classification": null,
+   "zoom_results": []
+  }
+ ],
+ "wall_time_s": 82.5
+}

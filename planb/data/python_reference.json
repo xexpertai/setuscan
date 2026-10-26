@@ -1,0 +1,452 @@
+{
+ "wide": {
+  "status": "awaiting_approval",
+  "actions": [
+   "check_quality",
+   "detect_scale",
+   "segment_measure",
+   "classify",
+   "request_approval"
+  ],
+  "band": "wide",
+  "growth": false,
+  "cracks": [
+   {
+    "id": 1,
+    "length_mm": 139.8,
+    "width_max_mm": 2.538,
+    "width_max_px": 12.79,
+    "width_source": "working view"
+   }
+  ],
+  "comparison": null,
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Segment and measure cracks in the current photo."
+   },
+   {
+    "step": 4,
+    "decider": "rules",
+    "action": "classify",
+    "args": {},
+    "rationale": "All measurements are in; apply the severity policy."
+   },
+   {
+    "step": 5,
+    "decider": "rules",
+    "action": "request_approval",
+    "args": {},
+    "rationale": "Policy result 'wide': an engineer must approve before a ticket is raised."
+   }
+  ]
+ },
+ "thin": {
+  "status": "closed",
+  "actions": [
+   "check_quality",
+   "detect_scale",
+   "segment_measure",
+   "zoom_measure",
+   "classify",
+   "close_case"
+  ],
+  "band": "fine",
+  "growth": false,
+  "cracks": [
+   {
+    "id": 1,
+    "length_mm": 132.1,
+    "width_max_mm": 0.41,
+    "width_max_px": 4.16,
+    "width_source": "zoom view at 10.13 px/mm"
+   }
+  ],
+  "comparison": null,
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Segment and measure cracks in the current photo."
+   },
+   {
+    "step": 4,
+    "decider": "rules",
+    "action": "zoom_measure",
+    "args": {
+     "visit": "current",
+     "crack_id": 1
+    },
+    "rationale": "Crack #1: only 2.4 px wide at the working scale and 0.44 mm is close to the 0.3 mm band edge; re-measuring it at the photo's native resolution."
+   },
+   {
+    "step": 5,
+    "decider": "rules",
+    "action": "classify",
+    "args": {},
+    "rationale": "All measurements are in; apply the severity policy."
+   },
+   {
+    "step": 6,
+    "decider": "rules",
+    "action": "close_case",
+    "args": {
+     "outcome": "fine"
+    },
+    "rationale": "Policy result 'fine' needs no engineer action; schedule re-inspection in 180 days."
+   }
+  ]
+ },
+ "growth": {
+  "status": "awaiting_approval",
+  "actions": [
+   "check_quality",
+   "check_quality",
+   "detect_scale",
+   "detect_scale",
+   "segment_measure",
+   "segment_measure",
+   "zoom_measure",
+   "compare_visits",
+   "classify",
+   "request_approval"
+  ],
+  "band": "moderate",
+  "growth": true,
+  "cracks": [
+   {
+    "id": 1,
+    "length_mm": 135.7,
+    "width_max_mm": 1.157,
+    "width_max_px": 6.85,
+    "width_source": "zoom view at 5.92 px/mm"
+   }
+  ],
+  "comparison": {
+   "ok": true,
+   "unit": "mm",
+   "length_a": 84.544,
+   "length_b": 135.714,
+   "width_max_a": 0.585,
+   "width_max_b": 1.157,
+   "extension": 47.115,
+   "length_change": 51.17,
+   "width_change": 0.571,
+   "significant_growth": true,
+   "note": ""
+  },
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "previous"
+    },
+    "rationale": "No quality check yet for the previous photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 4,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "previous"
+    },
+    "rationale": "Need px-to-mm scale for the previous photo."
+   },
+   {
+    "step": 5,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Segment and measure cracks in the current photo."
+   },
+   {
+    "step": 6,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "previous"
+    },
+    "rationale": "Segment and measure cracks in the previous photo."
+   },
+   {
+    "step": 7,
+    "decider": "rules",
+    "action": "zoom_measure",
+    "args": {
+     "visit": "current",
+     "crack_id": 1
+    },
+    "rationale": "Crack #1: 1.15 mm is close to the 1.0 mm band edge; re-measuring it at the photo's native resolution."
+   },
+   {
+    "step": 8,
+    "decider": "rules",
+    "action": "compare_visits",
+    "args": {},
+    "rationale": "Both visits are measured; align them to check for growth."
+   },
+   {
+    "step": 9,
+    "decider": "rules",
+    "action": "classify",
+    "args": {},
+    "rationale": "All measurements are in; apply the severity policy."
+   },
+   {
+    "step": 10,
+    "decider": "rules",
+    "action": "request_approval",
+    "args": {},
+    "rationale": "Policy result 'moderate' with significant growth: an engineer must approve before a ticket is raised."
+   }
+  ]
+ },
+ "blurry": {
+  "status": "needs_reshoot",
+  "actions": [
+   "check_quality",
+   "detect_scale",
+   "request_reshoot"
+  ],
+  "band": null,
+  "growth": null,
+  "cracks": [],
+  "comparison": null,
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "request_reshoot",
+    "args": {
+     "visit": "current",
+     "reasons": [
+      "blurry_marker"
+     ]
+    },
+    "rationale": "The marker's printed edges are blurred by sigma 3.0 px (0.52 mm), above the 2.5 px limit: crack widths would be over-read."
+   }
+  ]
+ },
+ "nomarker": {
+  "status": "needs_reshoot",
+  "actions": [
+   "check_quality",
+   "detect_scale",
+   "segment_measure",
+   "request_reshoot"
+  ],
+  "band": null,
+  "growth": null,
+  "cracks": [
+   {
+    "id": 1,
+    "length_mm": null,
+    "width_max_mm": null,
+    "width_max_px": 6.4,
+    "width_source": "working view"
+   }
+  ],
+  "comparison": null,
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Segment and measure cracks in the current photo."
+   },
+   {
+    "step": 4,
+    "decider": "rules",
+    "action": "request_reshoot",
+    "args": {
+     "visit": "current",
+     "reasons": [
+      "no_marker"
+     ]
+    },
+    "rationale": "1 crack(s) found but no scale marker, so widths are only in pixels and cannot be compared with the mm policy."
+   }
+  ]
+ },
+ "krakn": {
+  "status": "needs_reshoot",
+  "actions": [
+   "check_quality",
+   "detect_scale",
+   "segment_measure",
+   "request_reshoot"
+  ],
+  "band": null,
+  "growth": null,
+  "cracks": [
+   {
+    "id": 1,
+    "length_mm": null,
+    "width_max_mm": null,
+    "width_max_px": 10.02,
+    "width_source": "working view"
+   },
+   {
+    "id": 2,
+    "length_mm": null,
+    "width_max_mm": null,
+    "width_max_px": 8.12,
+    "width_source": "working view"
+   }
+  ],
+  "comparison": null,
+  "opencv": "5.0.0",
+  "trace": [
+   {
+    "step": 1,
+    "decider": "rules",
+    "action": "check_quality",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "No quality check yet for the current photo."
+   },
+   {
+    "step": 2,
+    "decider": "rules",
+    "action": "detect_scale",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Need px-to-mm scale for the current photo."
+   },
+   {
+    "step": 3,
+    "decider": "rules",
+    "action": "segment_measure",
+    "args": {
+     "visit": "current"
+    },
+    "rationale": "Segment and measure cracks in the current photo."
+   },
+   {
+    "step": 4,
+    "decider": "rules",
+    "action": "request_reshoot",
+    "args": {
+     "visit": "current",
+     "reasons": [
+      "no_marker"
+     ]
+    },
+    "rationale": "2 crack(s) found but no scale marker, so widths are only in pixels and cannot be compared with the mm policy."
+   }
+  ]
+ }
+}

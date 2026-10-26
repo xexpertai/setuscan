@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="DejaVu Sans, Arial, sans-serif">
+<defs>
+<marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+<marker id="g" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#94a3b8"/></marker>
+</defs>
+<rect width="1600" height="900" fill="#f8fafc"/>
+<text x="40" y="52" font-size="30" font-weight="700" fill="#0f172a">SetuScan on AWS (live in ap-southeast-2)</text>
+<text x="40" y="82" font-size="17" fill="#475569">Request path, observability, and the human approval step. Decision support only. Decider: deterministic rules (no LLM).</text>
+<rect x="30" y="110" width="1540" height="700" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="50" y="140" font-size="16" fill="#64748b">AWS account, region ap-southeast-2 (Sydney)</text>
+
+<!-- browser -->
+<rect x="50" y="300" width="210" height="150" rx="12" fill="#e0f2fe" stroke="#0369a1" stroke-width="2.5"/>
+<text x="155" y="340" font-size="21" font-weight="700" text-anchor="middle" fill="#0c4a6e">Browser / phone</text>
+<text x="155" y="368" font-size="15" text-anchor="middle" fill="#0c4a6e">Inspector uploads</text>
+<text x="155" y="390" font-size="15" text-anchor="middle" fill="#0c4a6e">1-2 photos + marker;</text>
+<text x="155" y="412" font-size="15" text-anchor="middle" fill="#0c4a6e">engineer approves</text>
+
+<!-- apigw -->
+<rect x="330" y="300" width="220" height="150" rx="12" fill="#ede9fe" stroke="#6d28d9" stroke-width="2.5"/>
+<text x="440" y="340" font-size="21" font-weight="700" text-anchor="middle" fill="#4c1d95">API Gateway</text>
+<text x="440" y="366" font-size="15" text-anchor="middle" fill="#4c1d95">HTTP API (HTTPS)</text>
+<text x="440" y="390" font-size="15" text-anchor="middle" fill="#4c1d95">throttle 5 req/s, burst 10</text>
+<text x="440" y="412" font-size="15" text-anchor="middle" fill="#4c1d95">access logs with requestId</text>
+
+<!-- lambda -->
+<rect x="620" y="190" width="520" height="440" rx="14" fill="#fff7ed" stroke="#c2410c" stroke-width="3"/>
+<text x="880" y="228" font-size="22" font-weight="700" text-anchor="middle" fill="#7c2d12">Lambda container: setuscan-api</text>
+<text x="880" y="252" font-size="15" text-anchor="middle" fill="#7c2d12">2 GB, 60 s, x86_64, Python 3.12, OpenCV 5.0.0</text>
+<rect x="650" y="275" width="460" height="130" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+<text x="880" y="302" font-size="17" font-weight="700" text-anchor="middle" fill="#7c2d12">OpenCV 5 perception tools</text>
+<text x="880" y="328" font-size="14" text-anchor="middle" fill="#7c2d12">quality gate · ArUco scale + homography</text>
+<text x="880" y="350" font-size="14" text-anchor="middle" fill="#7c2d12">crack segmentation, width and length</text>
+<text x="880" y="372" font-size="14" text-anchor="middle" fill="#7c2d12">zoom re-measure at native resolution</text>
+<text x="880" y="394" font-size="14" text-anchor="middle" fill="#7c2d12">two-visit registration (SIFT, RANSAC)</text>
+<rect x="650" y="425" width="460" height="86" rx="10" fill="#fef3c7" stroke="#d97706"/>
+<text x="880" y="452" font-size="17" font-weight="700" text-anchor="middle" fill="#78350f">Agent loop: observe, decide, guardrail, act</text>
+<text x="880" y="477" font-size="14" text-anchor="middle" fill="#78350f">rules decider; guardrails sit outside it</text>
+<text x="880" y="498" font-size="14" text-anchor="middle" fill="#78350f">full trace per step (rationale cites measured values)</text>
+<rect x="650" y="530" width="460" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
+<text x="880" y="558" font-size="18" font-weight="700" text-anchor="middle" fill="#14532d">HUMAN APPROVAL GATE</text>
+<text x="880" y="582" font-size="14" text-anchor="middle" fill="#14532d">Agent can only request approval. A ticket exists only after a</text>
+<text x="880" y="601" font-size="14" text-anchor="middle" fill="#14532d">named engineer approves; rejections are logged.</text>
+
+<!-- s3 -->
+<rect x="1230" y="190" width="300" height="130" rx="12" fill="#dcfce7" stroke="#15803d" stroke-width="2.5"/>
+<text x="1380" y="228" font-size="21" font-weight="700" text-anchor="middle" fill="#14532d">S3 (private)</text>
+<text x="1380" y="256" font-size="15" text-anchor="middle" fill="#14532d">cases, overlays, traces</text>
+<text x="1380" y="278" font-size="15" text-anchor="middle" fill="#14532d">1-day lifecycle expiry</text>
+<text x="1380" y="300" font-size="15" text-anchor="middle" fill="#14532d">no public access</text>
+
+<!-- cloudwatch -->
+<rect x="1230" y="400" width="300" height="200" rx="12" fill="#fce7f3" stroke="#be185d" stroke-width="2.5"/>
+<text x="1380" y="436" font-size="21" font-weight="700" text-anchor="middle" fill="#831843">CloudWatch</text>
+<text x="1380" y="464" font-size="15" text-anchor="middle" fill="#831843">Logs (14-day retention)</text>
+<text x="1380" y="488" font-size="15" text-anchor="middle" fill="#831843">Dashboard "setuscan"</text>
+<text x="1380" y="512" font-size="15" text-anchor="middle" fill="#831843">Alarm (Lambda errors)</text>
+<rect x="1255" y="535" width="250" height="48" rx="8" fill="#fbcfe8" stroke="#be185d"/>
+<text x="1380" y="565" font-size="16" font-weight="700" text-anchor="middle" fill="#831843">SNS email topic</text>
+
+<!-- budgets + ecr -->
+<rect x="620" y="680" width="330" height="100" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="785" y="712" font-size="18" font-weight="700" text-anchor="middle" fill="#334155">ECR (private image)</text>
+<text x="785" y="738" font-size="14" text-anchor="middle" fill="#334155">deployed by CloudFormation</text>
+<text x="785" y="760" font-size="14" text-anchor="middle" fill="#334155">scripts/deploy_aws.sh</text>
+<rect x="1000" y="680" width="330" height="100" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="1165" y="712" font-size="18" font-weight="700" text-anchor="middle" fill="#334155">AWS Budgets</text>
+<text x="1165" y="738" font-size="14" text-anchor="middle" fill="#334155">$20/month, alerts at $5/$10/$20</text>
+<text x="1165" y="760" font-size="14" text-anchor="middle" fill="#334155">notify only, no auto-shutdown</text>
+
+<!-- not used -->
+<rect x="50" y="530" width="500" height="120" rx="12" fill="#fff" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="300" y="562" font-size="17" font-weight="700" text-anchor="middle" fill="#64748b">Not in use (honest status)</text>
+<text x="300" y="590" font-size="14" text-anchor="middle" fill="#64748b">Amazon Bedrock: invoke denied on this account</text>
+<text x="300" y="612" font-size="14" text-anchor="middle" fill="#64748b">CloudFront: needs account verification (UI served by Lambda)</text>
+<text x="300" y="634" font-size="14" text-anchor="middle" fill="#64748b">Graviton / COOL: not used (x86_64 Lambda)</text>
+
+<!-- arrows -->
+<path d="M260,360 H328" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M550,360 H618" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M618,420 H552" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)" opacity="0"/>
+<path d="M1140,255 H1226" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M1140,500 H1228" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M1080,406 V424" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M1080,511 V528" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M1380,320 V398" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#g)" opacity="0"/>
+<path d="M1380,583 V583" stroke="#be185d"/>
+<path d="M785,680 V632" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6 4" fill="none" marker-end="url(#g)"/>
+<path d="M440,450 V490 H300 V528" stroke="#94a3b8" stroke-width="0" fill="none"/>
+<text x="289" y="345" font-size="13" text-anchor="middle" fill="#334155">HTTPS</text>
+<text x="584" y="345" font-size="13" text-anchor="middle" fill="#334155">invoke</text>
+<text x="1164" y="243" font-size="13" text-anchor="middle" fill="#334155">cases</text>
+<text x="1184" y="485" font-size="13" text-anchor="middle" fill="#334155">logs/metrics</text>
+<text x="1000" y="650" font-size="13" fill="#334155" text-anchor="middle"></text>
+
+<!-- legend -->
+<rect x="50" y="680" width="500" height="124" rx="10" fill="#fff" stroke="#cbd5e1"/>
+<text x="70" y="706" font-size="15" font-weight="700" fill="#334155">Flow</text>
+<text x="70" y="734" font-size="14" fill="#334155">1 photo(s) in, 2 OpenCV 5 measures, 3 agent decides</text>
+<text x="70" y="758" font-size="14" fill="#334155">(zoom, re-shoot, close, ask approval), 4 engineer</text>
+<text x="70" y="782" font-size="14" fill="#334155">approves, 5 ticket recorded; case expires in 24 h</text>
+</svg>

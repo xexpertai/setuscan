@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SetuScan</title>
+<meta name="description" content="Agentic crack inspection with mm measurement and change tracking, built on OpenCV 5.">
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#15181d; --muted:#5b6472; --line:#dde1e7;
+  --accent:#0b6bcb; --accent-ink:#ffffff; --ok:#17794a; --warn:#a15c00; --bad:#b42318;
+  --chip:#eef2f7; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#101317; --card:#181c22; --ink:#e8ebef; --muted:#9aa4b2; --line:#2a313a;
+    --accent:#5aa9ff; --accent-ink:#0b1220; --ok:#4cc38a; --warn:#f0a543; --bad:#ff7b72; --chip:#222932; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:0}
+h2{font-size:1.15rem;margin:0 0 12px}
+h3{font-size:1rem;margin:16px 0 8px}
+.tag{color:var(--muted);margin:2px 0 0}
+.disclaimer{font-size:.9rem;color:var(--muted);border-left:3px solid var(--warn);padding:4px 10px;margin-top:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.sample{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.sample img{width:100%;height:120px;object-fit:cover;border-radius:6px;background:#888}
+.label{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
+button,.btn{font:inherit;border:0;border-radius:8px;padding:10px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;min-height:44px}
+button.secondary{background:var(--chip);color:var(--ink)}
+button.danger{background:var(--bad);color:#fff}
+button:disabled{opacity:.5;cursor:progress}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+label{display:block;font-weight:600;margin:8px 0 4px}
+input[type=file],input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row>div{flex:1 1 240px}
+.status{font-weight:700;padding:10px 12px;border-radius:8px;background:var(--chip)}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.bad{color:var(--bad)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tabs button{min-height:36px;padding:6px 12px}
+.tabs button[aria-selected=true]{background:var(--accent);color:var(--accent-ink)}
+.tabs button[aria-selected=false]{background:var(--chip);color:var(--ink)}
+.viewer img.loading{visibility:hidden;min-height:240px}
+.viewer img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line);display:block}
+.trace{list-style:none;margin:0;padding:0}
+.trace li{border-left:3px solid var(--line);padding:6px 0 10px 12px;margin-left:6px;position:relative}
+.trace li::before{content:"";position:absolute;left:-7px;top:12px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.trace li.human::before{background:var(--ok)}
+.trace .act{font-family:var(--mono);font-weight:700}
+.trace .who{font-size:.75rem;padding:1px 6px;border-radius:999px;background:var(--chip);color:var(--muted);margin-left:6px}
+.trace details{font-size:.85rem;color:var(--muted)}
+.trace pre{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:.8rem;background:var(--bg);padding:8px;border-radius:6px;max-height:260px;overflow:auto}
+.cols{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:900px){.cols{grid-template-columns:3fr 2fr}}
+footer{color:var(--muted);font-size:.85rem;padding:24px 16px;text-align:center}
+.err{color:var(--bad);font-weight:600}
+.sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>SetuScan</h1>
+  <p class="tag">Crack inspection that measures in millimetres, looks closer when unsure, tracks growth between visits, and asks an engineer before raising a ticket.</p>
+  <p class="disclaimer">Decision support only. Not a structural certification. Severity bands are an <strong>example policy</strong>, not a design-code standard.</p>
+</div></header>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="h-samples">
+    <h2 id="h-samples">1. Try a sample</h2>
+    <div id="samples" class="grid" aria-live="polite">Loading samples...</div>
+  </section>
+
+  <section class="card" aria-labelledby="h-upload">
+    <h2 id="h-upload">or 2. Inspect your own photo</h2>
+    <p class="tag">Stick the printed SetuScan marker flat next to the crack. Photos are re-encoded on arrival (location data is dropped) and deleted after 24 hours. Do not photograph people.</p>
+    <form id="upload" class="row">
+      <div><label for="f-cur">Current photo (required)</label><input id="f-cur" name="current" type="file" accept="image/jpeg,image/png,image/webp" required></div>
+      <div><label for="f-prev">Previous visit photo (optional)</label><input id="f-prev" name="previous" type="file" accept="image/jpeg,image/png,image/webp"></div>
+      <div style="flex:0 0 auto"><button id="b-upload" type="submit">Run inspection</button></div>
+    </form>
+  </section>
+
+  <p id="busy" class="status" hidden role="status">Running the agent...</p>
+  <p id="error" class="err" role="alert"></p>
+
+  <section id="result" hidden>
+    <div class="card">
+      <h2>Result</h2>
+      <p id="status" class="status" role="status"></p>
+      <p id="source" class="tag"></p>
+      <div id="next"></div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h2>Images</h2>
+        <div id="tabs" class="tabs" role="tablist" aria-label="Result images"></div>
+        <div class="viewer"><img id="view" alt=""><p id="view-cap" class="tag"></p></div>
+      </div>
+      <div class="card">
+        <h2>Measurements</h2>
+        <div id="meas"></div>
+        <div id="comp"></div>
+      </div>
+    </div>
+    <div class="card" id="approval-card" hidden>
+      <h2>Engineer approval</h2>
+      <p id="approval-summary"></p>
+      <form id="approval" class="row">
+        <div><label for="rev">Your name (reviewer)</label><input id="rev" type="text" maxlength="80" required autocomplete="name"></div>
+        <div><label for="note">Note (optional)</label><input id="note" type="text" maxlength="500"></div>
+        <div style="flex:0 0 auto" class="row"><button type="submit" data-act="approve">Approve and raise ticket</button><button type="submit" class="danger" data-act="reject">Reject</button></div>
+      </form>
+    </div>
+    <div class="card" id="ticket-card" hidden><h2>Ticket</h2><table id="ticket"></table></div>
+    <div class="card">
+      <h2>Agent trace</h2>
+      <p class="tag">Every step: what the decider chose, why (citing OpenCV measurements), and what the tool returned. The decider that ran is shown on each step.</p>
+      <ol id="trace" class="trace"></ol>
+    </div>
+  </section>
+</main>
+<footer id="foot">SetuScan</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let current = null;
+let reveal = () => {};
+
+const STATUS = {
+  awaiting_approval: ["warn", "Awaiting engineer approval"],
+  ticket_raised: ["ok", "Ticket raised (approved by engineer)"],
+  rejected: ["bad", "Ticket rejected by engineer"],
+  needs_reshoot: ["warn", "Re-shoot requested"],
+  closed: ["ok", "Closed: no engineer action needed"],
+  error: ["bad", "Agent stopped with an error"],
+};
+const IMAGE_NAMES = {
+  current_overlay: "Current: cracks + widths", current_input: "Current photo", current_marker: "Current: marker",
+  previous_overlay: "Previous: cracks", previous_input: "Previous photo", previous_marker: "Previous: marker",
+  comparison: "Change since previous",
+};
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || ("HTTP " + r.status));
+  return j;
+}
+
+async function loadMeta() {
+  try {
+    const h = await api("/api/health");
+    $("#foot").textContent = `SetuScan · OpenCV ${h.opencv} · Python ${h.python} · decider: ${h.decider_kind} · storage: ${h.storage} · MIT licence`;
+  } catch (e) {}
+  try {
+    const s = await api("/api/samples");
+    $("#samples").innerHTML = s.map(x => `
+      <div class="sample">
+        <img src="/api/samples/${esc(x.id)}/${esc(x.files.current)}" alt="${esc(x.title)} (sample photo)" loading="lazy">
+        <span class="label">${esc(x.label)}</span>
+        <strong>${esc(x.title)}</strong>
+        <span class="tag" style="font-size:.9rem">${esc(x.description)}</span>
+        <button class="secondary" data-sample="${esc(x.id)}">Inspect this sample</button>
+      </div>`).join("") || "No samples installed.";
+  } catch (e) { $("#samples").textContent = "Could not load samples."; }
+}
+
+function busy(on) {
+  $("#busy").hidden = !on;
+  document.querySelectorAll("button").forEach(b => b.disabled = on);
+  if (on) $("#error").textContent = "";
+}
+
+async function run(promise) {
+  busy(true);
+  try { show(await promise); await new Promise(r => { const t = setInterval(() => { if (!$("#result").hidden) { clearInterval(t); r(); } }, 50); }); $("#result").scrollIntoView({behavior: "smooth"}); }
+  catch (e) { $("#error").textContent = e.message; }
+  finally { busy(false); }
+}
+
+document.addEventListener("click", e => {
+  const id = e.target?.dataset?.sample;
+  if (id) run(api(`/api/inspect_sample/${encodeURIComponent(id)}`, {method: "POST"}));
+});
+$("#upload").addEventListener("submit", e => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append("current", $("#f-cur").files[0]);
+  if ($("#f-prev").files[0]) fd.append("previous", $("#f-prev").files[0]);
+  run(api("/api/inspect", {method: "POST", body: fd}));
+});
+$("#approval").addEventListener("submit", e => {
+  e.preventDefault();
+  const act = e.submitter?.dataset?.act || "approve";
+  const fd = new FormData();
+  fd.append("reviewer", $("#rev").value); fd.append("note", $("#note").value);
+  run(api(`/api/cases/${current.id}/${act}`, {method: "POST", body: fd}));
+});
+
+function fmt(v, d = 2) { return v === null || v === undefined ? "–" : (typeof v === "number" ? v.toFixed(d) : esc(v)); }
+
+function qualityLine(q, cur, rs) {
+  if (!q) return "Photo checks: –";
+  if (!q.ok) return "Photo checks (sharpness, exposure, glare): failed: " + q.issues.map(esc).join(", ");
+  const base = "Photo-level checks (sharpness, exposure, glare): passed";
+  if (rs && rs.reasons.includes("blurry_marker")) {
+    const sc = cur.scale || {};
+    return base + `, but the marker region is blurry (edge blur ${fmt(sc.edge_blur_px, 1)} px, limit ${rs.max_edge_blur_px ?? "–"} px), so a re-shoot is needed`;
+  }
+  return base;
+}
+
+function show(c) {
+  current = c;
+  $("#result").hidden = true;  // revealed only after the first image has loaded or failed (see reveal())
+  const [cls, txt] = STATUS[c.status] || ["", c.status];
+  $("#status").className = "status " + cls;
+  $("#status").textContent = txt;
+  $("#source").textContent = `Input: ${c.labels.source || "?"}${c.labels.title ? " · " + c.labels.title : ""} · case ${c.id} · agent time ${c.labels.agent_total_ms ?? "?"} ms`;
+
+  let next = "";
+  if (c.reshoot) next = `<h3>Why a re-shoot</h3><p>Reasons: <strong>${c.reshoot.reasons.map(esc).join(", ")}</strong></p><ul>${c.reshoot.advice.map(a => `<li>${esc(a)}</li>`).join("")}</ul>`;
+  if (c.classification) {
+    const k = c.classification;
+    next += `<p>Policy result: <strong>${esc(k.band)}</strong>${k.width_max_mm != null ? ` (worst max width ${fmt(k.width_max_mm)} mm, from ${esc(k.width_source)})` : ""}${k.growth ? " · <strong>significant growth</strong>" : ""}. <span class="tag">${esc(k.policy)}</span></p>`;
+  }
+  const closeStep = c.trace.find(t => t.action === "close_case");
+  if (closeStep?.result?.reinspect_by) next += `<p>Re-inspect by <strong>${esc(closeStep.result.reinspect_by)}</strong>.</p>`;
+  $("#next").innerHTML = next;
+
+  // images
+  const names = Object.keys(c.image_urls).filter(n => n !== "current_marker" || !c.image_urls.current_overlay);
+  const order = n => ["current_overlay","comparison"].indexOf(n) >= 0 ? ["current_overlay","comparison"].indexOf(n) : (n.includes("zoom") ? 2 : 3);
+  names.sort((a, b) => order(a) - order(b));
+  $("#tabs").innerHTML = names.map((n, i) => `<button role="tab" aria-selected="${i === 0}" data-img="${esc(n)}">${esc(IMAGE_NAMES[n] || n.replace(/_/g, " ").replace("current zoom", "Zoom on crack #"))}</button>`).join("");
+  const pick = n => {
+    const v = $("#view");
+    // first image: hidden until loaded (never an empty panel). Later tab switches: keep the old image on screen until the new one has loaded, then swap.
+    const swap = revealed;
+    if (!swap) { v.classList.add("loading"); v.removeAttribute("src"); }
+    const done = ok => { if (v.dataset.want !== n) return; reveal(); v.classList.remove("loading"); if (!ok) $("#view-cap").textContent = "This image could not be loaded. Choose another tab or run the sample again."; };
+    v.dataset.want = n;
+    if (swap) {
+      const pre = new Image();
+      pre.onload = () => { if (v.dataset.want === n) { v.src = c.image_urls[n]; done(true); } };
+      pre.onerror = () => done(false);
+      pre.src = c.image_urls[n];
+    } else {
+      v.onload = () => done(true);
+      v.onerror = () => done(false);
+      v.src = c.image_urls[n];
+    }
+    $("#view").alt = (IMAGE_NAMES[n] || n) + " for case " + c.id;
+    $("#view-cap").textContent = n.includes("zoom") ? "ZOOM VIEW: the agent's closer look at native resolution (active perception). The measurements table below uses this view." :
+      n === "comparison" ? "Previous visit aligned onto current frame; red = crack present now but not before. The 'Change since previous visit' widths come from this aligned comparison view, so they can differ slightly from the table." :
+      n === "current_overlay" ? (c.visits.current.analysis?.mm_per_px ? "WORKING VIEW: every number drawn on this overlay is measured in the working view. Perspective removed using the marker; orange = crack, cyan = centre line. 'W med' = median width along the whole crack (compare this with a gauge or a known true width); 'p95' = 95th-percentile width, the near-maximum the severity policy uses; each 'sample' is one local width at a circle. The table below uses the zoom view when the agent zoomed, so its numbers can differ slightly from the overlay." : "No marker: pixels only.") : "";
+    document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.img === n));
+  };
+  $("#tabs").onclick = e => e.target.dataset.img && pick(e.target.dataset.img);
+  let revealed = false;
+  reveal = () => { if (!revealed) { revealed = true; $("#result").hidden = false; } };
+  if (names.length) { pick(names[0]); setTimeout(reveal, 20000); } else reveal();
+
+  // measurements
+  const cur = c.visits.current;
+  const unit = cur.analysis?.mm_per_px ? "mm" : "px";
+  const rows = (cur.cracks || []).map(k => `<tr><td>#${k.id}</td>
+     <td class="num">${unit === "mm" ? fmt(k.length_mm, 0) : fmt(k.length_px, 0)}</td>
+     <td class="num">${unit === "mm" ? fmt(k.width_median_mm) : fmt(k.width_median_px, 1)}</td>
+     <td class="num">${unit === "mm" ? fmt(k.width_max_mm) : fmt(k.width_max_px, 1)}</td>
+     <td class="num">${fmt(k.width_max_px, 1)}</td>
+     <td>${esc(k.width_source)}${k.width_reliable ? "" : " ⚠ thin"}</td></tr>`).join("");
+  const q = cur.quality;
+  $("#meas").innerHTML = `
+    <p class="tag">${qualityLine(q, cur, c.reshoot)} ·
+    Scale: ${cur.scale?.found ? `marker ${fmt(cur.scale.marker_mm, 0)} mm, ${fmt(cur.scale.px_per_mm_native)} px/mm, tilt ratio ${fmt(cur.scale.tilt_ratio)}` : "no marker"}</p>
+    ${rows ? `<table><caption class="sr">Cracks in current photo</caption><thead><tr><th>Crack</th><th>Length (${unit})</th><th>Width median (${unit})</th><th>Width p95 (${unit})</th><th>Width p95 (px)</th><th>Width from</th></tr></thead><tbody>${rows}</tbody></table><p class="tag">Table values: ${(cur.cracks || []).some(k => k.zoomed) ? "ZOOM VIEW (native resolution)" : "WORKING VIEW (same as the overlay)"}. Median = typical width along the crack (the like-for-like number for a gauge or a known true width). p95 = near-maximum, which the severity policy uses, so it reads higher.</p>` : "<p>No crack measured.</p>"}`;
+  const cp = c.comparison;
+  $("#comp").innerHTML = cp ? `<h3>Change since previous visit</h3>${cp.ok ? `<p class="tag">COMPARISON VIEW: both visits re-measured at one common scale after alignment; small differences from the overlay and the table are expected.</p><table>
+     <tr><th>New crack length</th><td class="num">${fmt(cp.extension, 1)} ${cp.unit}</td></tr>
+     <tr><th>Median width then → now</th><td class="num">${fmt(cp.width_median_a)} → ${fmt(cp.width_median_b)} ${cp.unit}</td></tr>
+     <tr><th>p95 width then → now</th><td class="num">${fmt(cp.width_max_a)} → ${fmt(cp.width_max_b)} ${cp.unit}</td></tr>
+     <tr><th>Total length then → now</th><td class="num">${fmt(cp.length_a, 0)} → ${fmt(cp.length_b, 0)} ${cp.unit}</td></tr>
+     <tr><th>Alignment</th><td>${esc(cp.registration.method)}, ${cp.registration.n_inliers} inliers, residual ${fmt(cp.registration.rms_px)} px</td></tr>
+     <tr><th>Significant growth</th><td><strong>${cp.significant_growth ? "yes" : "no"}</strong></td></tr></table>` : `<p class="err">${esc(cp.note)}</p>`}` : "";
+
+  // approval + ticket
+  $("#approval-card").hidden = c.status !== "awaiting_approval";
+  if (c.approval) $("#approval-summary").textContent = c.approval.summary || "";
+  $("#ticket-card").hidden = !c.ticket;
+  if (c.ticket) $("#ticket").innerHTML = Object.entries(c.ticket).map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("");
+
+  // trace
+  $("#trace").innerHTML = c.trace.map(t => `<li class="${t.decider === "human" ? "human" : ""}">
+    <div><span class="num">${t.step}.</span> <span class="act">${esc(t.action || "error")}</span><span class="who">${esc(t.decider || "")}</span></div>
+    <div>${esc(t.rationale || t.error || "")}</div>
+    <details><summary>tool result${t.act_ms != null ? ` · ${t.act_ms} ms` : ""}</summary><pre>${esc(JSON.stringify({args: t.args, result: t.result, allowed_next: t.allowed}, null, 1))}</pre></details>
+  </li>`).join("");
+}
+loadMeta().then(() => {
+  // deep link: /?sample=<id> runs that sample on load (used for demos and screenshots)
+  const id = new URLSearchParams(location.search).get("sample");
+  if (id) run(api(`/api/inspect_sample/${encodeURIComponent(id)}`, {method: "POST"}));
+});
+</script>
+</body>
+</html>

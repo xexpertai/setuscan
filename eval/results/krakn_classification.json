@@ -1,0 +1,164 @@
+{
+ "provenance": {
+  "script": "eval/eval_krakn.py",
+  "generated_utc": "2026-10-11T19:45:04+00:00",
+  "git_commit": "b53b29f",
+  "setuscan_dirty": false,
+  "opencv": "5.0.0",
+  "numpy": "2.5.4",
+  "python": "3.12.15",
+  "machine": "x86_64",
+  "cpu_count": 8
+ },
+ "dataset": {
+  "name": "KrakN associated dataset",
+  "doi": "10.5281/zenodo.5266356",
+  "url": "https://zenodo.org/records/5266356",
+  "license": "CC BY 4.0",
+  "authors": "Mateusz Zarski, Bartosz Wojcik, Jaroslaw Adam Miszczak",
+  "note": "224x224 patches; '_r' rotated duplicates of crack patches excluded"
+ },
+ "method": {
+  "detector": "classical OpenCV (black-hat depth x Hessian ridge, hysteresis, shape filter)",
+  "params": {
+   "max_width_px": 17,
+   "sigmas": [
+    1.0,
+    2.0,
+    3.5
+   ],
+   "k_high": 5.0,
+   "k_low": 3.0,
+   "min_contrast": 6.0,
+   "min_len_px": 40.0,
+   "min_elongation": 10.0,
+   "min_fill_contrast": 0.5,
+   "max_asymmetry": 0.13
+  },
+  "score": "total skeleton length of kept components (px)",
+  "threshold_chosen_on": "dev split (max F1)",
+  "learned_weights": null,
+  "params_chosen_on": "dev split, see eval/results/krakn_dev_tuning.json"
+ },
+ "counts": {
+  "dev": {
+   "crack": 1231,
+   "background": 2380
+  },
+  "test": {
+   "crack": 2819,
+   "background": 5677
+  }
+ },
+ "threshold_px": 63.58113884925842,
+ "dev": {
+  "tp": 1113,
+  "fp": 172,
+  "fn": 118,
+  "tn": 2208,
+  "precision": 0.8661,
+  "recall": 0.9041,
+  "f1": 0.8847,
+  "accuracy": 0.9197
+ },
+ "test": {
+  "tp": 2492,
+  "fp": 433,
+  "fn": 327,
+  "tn": 5244,
+  "precision": 0.852,
+  "recall": 0.884,
+  "f1": 0.8677,
+  "accuracy": 0.9105,
+  "average_precision": 0.8445
+ },
+ "test_threshold_sweep": [
+  {
+   "threshold_px": 0.0,
+   "precision": 0.8025,
+   "recall": 0.9181,
+   "f1": 0.8564
+  },
+  {
+   "threshold_px": 20.0,
+   "precision": 0.8024,
+   "recall": 0.9103,
+   "f1": 0.8529
+  },
+  {
+   "threshold_px": 40.0,
+   "precision": 0.8093,
+   "recall": 0.9063,
+   "f1": 0.8551
+  },
+  {
+   "threshold_px": 60.0,
+   "precision": 0.8472,
+   "recall": 0.889,
+   "f1": 0.8676
+  },
+  {
+   "threshold_px": 63.58113884925842,
+   "precision": 0.852,
+   "recall": 0.884,
+   "f1": 0.8677
+  },
+  {
+   "threshold_px": 80.0,
+   "precision": 0.8652,
+   "recall": 0.8606,
+   "f1": 0.8629
+  },
+  {
+   "threshold_px": 120.0,
+   "precision": 0.8845,
+   "recall": 0.7797,
+   "f1": 0.8288
+  },
+  {
+   "threshold_px": 160.0,
+   "precision": 0.8922,
+   "recall": 0.6896,
+   "f1": 0.7779
+  }
+ ],
+ "runtime_ms_per_image": {
+  "mean": 25.84,
+  "p95": 49.56
+ },
+ "wall_time_s": 58.0,
+ "failure_examples": {
+  "false_positives": [
+   "background4993.jpg",
+   "background6760.jpg",
+   "background7035.jpg",
+   "background2045.jpg",
+   "background2366.jpg",
+   "background6766.jpg",
+   "background4800.jpg",
+   "background3878.jpg",
+   "background4103.jpg",
+   "background4928.jpg",
+   "background6538.jpg",
+   "background4026.jpg"
+  ],
+  "false_negatives": [
+   "crack10003.jpg",
+   "crack10181.jpg",
+   "crack10213.jpg",
+   "crack10226.jpg",
+   "crack10250.jpg",
+   "crack10285.jpg",
+   "crack10287.jpg",
+   "crack10338.jpg",
+   "crack10343.jpg",
+   "crack10344.jpg",
+   "crack10363.jpg",
+   "crack10368.jpg"
+  ],
+  "montages": [
+   "eval/results/krakn_false_positives.jpg",
+   "eval/results/krakn_false_negatives.jpg"
+  ]
+ }
+}
